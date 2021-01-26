@@ -14,11 +14,12 @@ The tuples in the stack will have the pixel coordinates and the pixel value.
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
+from progress.bar import IncrementalBar
 
 # load an image
-img = cv2.imread("input.jpg")
+img = cv2.imread("input3.jpg")
 
-cv2.imshow("Disp", img)
+# cv2.imshow("Disp", img)
 
 # Params for the performing the segmentation.
 threshold = 10.0
@@ -63,26 +64,26 @@ regions = list()
 colors = list()
 
 # initially form regions manually
-eucl_dist = eucl_dist(p1["Val"], p2["Val"])
+dist = eucl_dist(p1["Val"], p2["Val"])
 
 
-if eucl_dist < threshold:
+if dist < threshold:
     new_col, colors = gen_color(colors)
     reg = {"pixels": [p1["Coord"], p2["Coord"]], "values": [
         p1["Val"], p2["Val"]], "mean": 0.0, "col": new_col}
-    reg["mean"] = np.mean(reg["values"])
+    reg["mean"] = np.mean(reg["values"], axis=0)
 
-    output[p1["Coord"]] = new_col
-    output[p2["Coord"]] = new_col
+    output[p1["Coord"][0], p1["Coord"][1]] = new_col
+    output[p2["Coord"][0], p2["Coord"][1]] = new_col
 
     regions.append(reg)
 else:
     new_col, colors = gen_color(colors)
     reg = {"pixels": [p1["Coord"]], "values": [
         p1["Val"]], "mean": 0.0, "col": new_col}
-    reg["mean"] = np.mean(reg["values"])
+    reg["mean"] = np.mean(reg["values"], axis=0)
 
-    output[p1["Coord"]] = new_col
+    output[p1["Coord"][0], p1["Coord"][1]] = new_col
 
     regions.append(reg)
 
@@ -91,13 +92,16 @@ else:
         p2["Val"]], "mean": 0.0, "col": new_col}
     reg["mean"] = np.mean(reg["values"])
 
-    output[p2["Coord"]] = new_col
+    output[p2["Coord"][0], p2["Coord"][1]] = new_col
 
     regions.append(reg)
 
 # start now with traversing the array of regions and stack
-while len(stack) > 0:
-    r1 = stack.pop()
+bar = IncrementalBar('Countdown', max=len(stack))
+for r1 in reversed(stack):
+    # r1 = stack.pop()
+
+    flag = False  # to tell if the region can be combined
 
     for r in regions:
         dist = eucl_dist(r1["Val"], r["mean"])
@@ -106,10 +110,27 @@ while len(stack) > 0:
         if dist < threshold:
             r["pixels"].append(r1["Coord"])
             r["values"].append(r1["Val"])
-            r["mean"] = np.mean(r["values"])
+            r["mean"] = np.mean(r["values"], axis=0)
 
-            output[r1["Coord"]] = r["col"]
-        else:
+            output[r1["Coord"][0], r1["Coord"][1]] = r["col"]
+
+            flag = True
+            break  # move onto the next pixel in stack
+
+    if not flag:
+        new_col, colors = gen_color(colors)
+        reg = {"pixels": [r1["Coord"]], "values": [
+            r1["Val"]], "mean": 0.0, "col": new_col}
+        reg["mean"] = np.mean(reg["values"], axis=0)
+
+        output[r1["Coord"][0], r1["Coord"][1]] = new_col
+
+        regions.append(reg)
+    # print(len(regions))
+    bar.next()
+    # time.sleep(1)
+
+cv2.imwrite("Seg.jpg", output)
 
 
 cv2.waitKey(0)
