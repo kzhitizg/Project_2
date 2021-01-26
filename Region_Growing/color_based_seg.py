@@ -17,12 +17,12 @@ from matplotlib import pyplot as plt
 from progress.bar import IncrementalBar
 
 # load an image
-img = cv2.imread("input3.jpg")
+img = cv2.imread("1.jpg")
 
 # cv2.imshow("Disp", img)
 
 # Params for the performing the segmentation.
-threshold = 10.0
+threshold = 20.0
 
 # numpy array to store the final image
 output = np.zeros(img.shape)
