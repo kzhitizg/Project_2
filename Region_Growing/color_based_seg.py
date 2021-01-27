@@ -9,15 +9,19 @@ The region is a dictionary object with the following values:
 Structure of Elements in Stack:
 The tuples in the stack will have the pixel coordinates and the pixel value.
 '''
-
+import time
 
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 from progress.bar import IncrementalBar
 
+t = time.time()
 # load an image
 img = cv2.imread("1.jpg")
+img = cv2.resize(img, (0, 0), fx = 0.1, fy = 0.1)
+
+print(img.shape)
 
 # cv2.imshow("Disp", img)
 
@@ -49,7 +53,7 @@ def gen_color(oldCol: list):
         color = [r, g, b]
 
     oldCol.append(color)
-    return (color, oldCol)
+    return color
 
 
 def eucl_dist(v1, v2):
@@ -68,7 +72,7 @@ dist = eucl_dist(p1["Val"], p2["Val"])
 
 
 if dist < threshold:
-    new_col, colors = gen_color(colors)
+    new_col = gen_color(colors)
     reg = {"pixels": [p1["Coord"], p2["Coord"]], "values": [
         p1["Val"], p2["Val"]], "mean": 0.0, "col": new_col}
     reg["mean"] = np.mean(reg["values"], axis=0)
@@ -78,7 +82,7 @@ if dist < threshold:
 
     regions.append(reg)
 else:
-    new_col, colors = gen_color(colors)
+    new_col = gen_color(colors)
     reg = {"pixels": [p1["Coord"]], "values": [
         p1["Val"]], "mean": 0.0, "col": new_col}
     reg["mean"] = np.mean(reg["values"], axis=0)
@@ -87,7 +91,7 @@ else:
 
     regions.append(reg)
 
-    new_col, colors = gen_color(colors)
+    new_col = gen_color(colors)
     reg = {"pixels": [p2["Coord"]], "values": [
         p2["Val"]], "mean": 0.0, "col": new_col}
     reg["mean"] = np.mean(reg["values"])
@@ -118,7 +122,7 @@ for r1 in reversed(stack):
             break  # move onto the next pixel in stack
 
     if not flag:
-        new_col, colors = gen_color(colors)
+        new_col = gen_color(colors)
         reg = {"pixels": [r1["Coord"]], "values": [
             r1["Val"]], "mean": 0.0, "col": new_col}
         reg["mean"] = np.mean(reg["values"], axis=0)
@@ -131,6 +135,7 @@ for r1 in reversed(stack):
     # time.sleep(1)
 
 cv2.imwrite("Seg.jpg", output)
-
+print(t-time.time())
+print(len(regions))
 
 cv2.waitKey(0)
