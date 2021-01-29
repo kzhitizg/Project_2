@@ -18,31 +18,6 @@ import matplotlib.pyplot as plt
 from matplotlib import pyplot as plt
 from progress.bar import IncrementalBar
 
-t = time.time()
-
-# load an image
-img = cv2.imread("1.jpg")
-img = cv2.resize(img, (0, 0), fx = 0.5, fy = 0.5)
-
-print(img.shape)
-
-# cv2.imshow("Disp", img)
-
-# Params for the performing the segmentation.
-threshold = 20.0
-
-# numpy array to store the final image
-output = np.zeros(img.shape)
-
-# # perform the following operations on the entire image
-# stack = []  # for storing the info of all pixels
-
-# for i in range(img.shape[0]):
-#     for j in range(img.shape[1]):
-#         obj = {"Coord": [i, j], "Val": img[i, j]}
-#         stack.append(obj)
-
-stack = np.flip(np.reshape(img, (-1, 3)))
 
 def gen_color(oldCol: set):
     r = np.random.rand()*255
@@ -58,116 +33,153 @@ def gen_color(oldCol: set):
 
 
 def eucl_dist(v1, v2):
-    return np.linalg.norm(v1 - v2)
+    return np.linalg.norm(np.float64(v1) - v2)
 
-def to_2D(pt):
-    return pt%img.shape[0], pt//img.shape[1]
 
-# code to start with the segmentation
-p1 = stack[0]
-p2 = stack[1]
+def reg_growing(img_path):
+    t = time.time()
+    # load an image
+    img = cv2.imread(img_path)
+    # img = cv2.resize(img, (0, 0), fx = 0.5, fy = 0.5)
+    
+    def to_2D(pt):
+        return pt//img.shape[1], pt%img.shape[1]
 
-r_mean = np.zeros_like(stack, "float32")
-r_it = 0
-r_colors = np.zeros_like(stack)
-r_count = array.array('i')
-colors = set()
+    print(img.shape)
 
-# initially form regions manually
-dist = eucl_dist(p1, p2)
+    # cv2.imshow("Disp", img)
 
-if dist < threshold:
-    new_col = gen_color(colors)
-    # reg = {"pixels": [to_2D(0), to_2D(1)], "values": [
-    #     p1, p2], "mean": 0.0, "col": new_col}
-    # reg["mean"] = np.mean(reg["values"], axis=0)
+    # Params for the performing the segmentation.
+    threshold = 10.0
 
-    mean = np.mean([p1, p2], axis=0)
+    # numpy array to store the final image
+    output = np.zeros(img.shape)
 
-    output[to_2D(0)] = new_col
-    output[to_2D(1)] = new_col
+    # # perform the following operations on the entire image
+    # stack = []  # for storing the info of all pixels
 
-    # regions.append(reg)
-    r_count.append(2)
-    r_mean[r_it] = mean
-    r_colors[r_it] = new_col
-    r_it += 1
+    # for i in range(img.shape[0]):
+    #     for j in range(img.shape[1]):
+    #         obj = {"Coord": [i, j], "Val": img[i, j]}
+    #         stack.append(obj)
 
-else:
-    new_col = gen_color(colors)
-    # reg = {"pixels": [to_2D(0)], "values": [
-    #     p1], "mean": 0.0, "col": new_col}
-    # reg["mean"] = np.mean(reg["values"], axis=0)
+    stack = np.flip(np.reshape(img, (-1, 3)))
 
-    output[to_2D(0)] = new_col
+    # code to start with the segmentation
+    p1 = stack[0]
+    p2 = stack[1]
 
-    # regions.append(reg)
+    r_mean = np.zeros_like(stack, "float32")
+    r_it = 0
+    r_colors = np.zeros_like(stack)
+    r_count = array.array('i')
+    colors = set()
 
-    r_count.append(1)
-    r_mean[r_it] = p1
-    r_it += 1
+    # initially form regions manually
+    dist = eucl_dist(p1, p2)
 
-    new_col = gen_color(colors)
-    # reg = {"pixels": [to_2D(1)], "values": [
-    #     p2], "mean": 0.0, "col": new_col}
-    # reg["mean"] = np.mean(reg["values"])
-
-    output[to_2D(1)] = new_col
-
-    r_count.append(1)
-    r_mean[r_it] = p2
-    r_it += 1
-
-# t = time.time()
-# start now with traversing the array of regions and stack
-bar = IncrementalBar('Countdown', max=stack.shape[0])
-for i in range(2, stack.shape[0]):
-    r1 = stack[i]
-    # r1 = stack.pop()
-
-    flag = False  # to tell if the region can be combined
-
-    for j in range(len(r_count)):
-        dist = eucl_dist(r1, r_mean[j])
-
-        # combine
-        if dist < threshold:
-            # r["pixels"].append(to_2D(i))
-            # r["values"].append(r1)
-            # r["mean"] = np.mean(r["values"], axis=0)
-
-            r_mean[j] = (r_mean[j]*r_count[j] + r1)/(r_count[j]+1)
-            # print(r_mean)
-            # exit(0)
-            r_count[j] += 1
-
-            output[to_2D(i)] = r_colors[j]
-
-            flag = True
-            break  # move onto the next pixel in stack
-
-    if not flag:
+    if dist < threshold:
         new_col = gen_color(colors)
-        # reg = {"pixels": [to_2D(i)], "values": [
-        #     r1], "mean": 0.0, "col": new_col}
+        # reg = {"pixels": [to_2D(0), to_2D(1)], "values": [
+        #     p1, p2], "mean": 0.0, "col": new_col}
         # reg["mean"] = np.mean(reg["values"], axis=0)
 
-        output[to_2D(i)] = new_col
+        mean = np.mean([p1, p2], axis=0)
+
+        output[to_2D(0)] = new_col
+        output[to_2D(1)] = new_col
 
         # regions.append(reg)
-        r_count.append(1)
-        r_mean[r_it] = r1
+        r_count.append(2)
+        r_mean[r_it] = mean
         r_colors[r_it] = new_col
         r_it += 1
-    # print(len(regions))
-    bar.next()
 
-    # time.sleep(1)
+    else:
+        new_col = gen_color(colors)
+        # reg = {"pixels": [to_2D(0)], "values": [
+        #     p1], "mean": 0.0, "col": new_col}
+        # reg["mean"] = np.mean(reg["values"], axis=0)
 
-# cv2.imwrite("Seg.jpg", output)
-print(r_it)
+        output[to_2D(0)] = new_col
 
-plt.matshow(output)
-# cv2.waitKey(0)
+        # regions.append(reg)
 
-print(t-time.time())
+        r_count.append(1)
+        r_mean[r_it] = p1
+        r_it += 1
+
+        new_col = gen_color(colors)
+        # reg = {"pixels": [to_2D(1)], "values": [
+        #     p2], "mean": 0.0, "col": new_col}
+        # reg["mean"] = np.mean(reg["values"])
+
+        output[to_2D(1)] = new_col
+
+        r_count.append(1)
+        r_mean[r_it] = p2
+        r_it += 1
+
+    # t = time.time()
+    # start now with traversing the array of regions and stack
+    bar = IncrementalBar('Countdown', max=stack.shape[0]//100)
+    for i in range(2, stack.shape[0]):
+        r1 = stack[i]
+        # r1 = stack.pop()
+
+        flag = False  # to tell if the region can be combined
+
+        for j in range(len(r_count)):
+            dist = eucl_dist(r1, r_mean[j])
+
+            # combine
+            if dist < threshold:
+                # r["pixels"].append(to_2D(i))
+                # r["values"].append(r1)
+                # r["mean"] = np.mean(r["values"], axis=0)
+
+                r_mean[j] = (r_mean[j]*r_count[j] + r1)/(r_count[j]+1)
+                # print(r_mean)
+                # exit(0)
+                r_count[j] += 1
+
+                output[to_2D(i)] = r_colors[j]
+
+                flag = True
+                break  # move onto the next pixel in stack
+
+        if not flag:
+            new_col = gen_color(colors)
+            # reg = {"pixels": [to_2D(i)], "values": [
+            #     r1], "mean": 0.0, "col": new_col}
+            # reg["mean"] = np.mean(reg["values"], axis=0)
+
+            output[to_2D(i)] = new_col
+
+            # regions.append(reg)
+            r_count.append(1)
+            r_mean[r_it] = r1
+            r_colors[r_it] = new_col
+            r_it += 1
+        # print(len(regions))
+
+        if i%100 == 0:
+            bar.next()
+
+        # time.sleep(1)
+
+    cv2.imwrite("10Seg"+img_path, output)
+    print()
+    print(r_it)
+
+    # plt.matshow(output)
+    # # cv2.waitKey(0)
+    # plt.show()
+
+    print(t-time.time())
+    print(len(colors))
+
+if __name__ == "__main__":
+    reg_growing("1.jpg")
+    reg_growing("2.jpg")
+    reg_growing("3.jpg")
