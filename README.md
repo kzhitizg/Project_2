@@ -1,8 +1,19 @@
 # Project_2
 Repo for Project 2, Osteosarcoma detection
 
-### Cython modules info
-* Put all cython files in cython folder
-* Sample cython file is in that folder
-* To compile cython files, make a setup.py file, copy the same code, and build it using ```pwsh python setup.py build_ext --inplace ```
-* Import that file as any other python module after building
+## cython_files
+Contains the cython sample files
+
+## Region_Growing
+Contains images, with scripts to run region growing algorithms
+
+## modules
+Contains the cython modules
+
+### NbrRegionSegment
+Contains Region Growing through neighbours, implemented in cpp
+
+**Note** To build a cython module, follow the following steps :-
+* Run the build.ps1 (Windows) or build.sh (Linux) in source directory. It will build the cpp + header files to use
+* .pyd file should be created along with build directory
+* The pyd file can be imported as a normal python file (import xyz). The functions defined in the .pyx file (in src/cython folder) can be used as normal python functions
