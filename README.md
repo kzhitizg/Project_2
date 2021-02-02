@@ -17,3 +17,4 @@ Contains Region Growing through neighbours, implemented in cpp
 * Run the build.ps1 (Windows) or build.sh (Linux) in source directory. It will build the cpp + header files to use
 * .pyd file should be created along with build directory
 * The pyd file can be imported as a normal python file (import xyz). The functions defined in the .pyx file (in src/cython folder) can be used as normal python functions
+* For better usability, the .pyd functions are wrapped by module itself, so importing the folder in a script will provide all required functions with better IDE suggestions. Its usage can be found in Segmentation.ipynb
