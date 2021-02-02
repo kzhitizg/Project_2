@@ -6,7 +6,7 @@ import time
 def SegmentImage(img, thres, show_time = False):
     t = time.time()
 
-    res = SegmentWrapper(img.astype("int"), thres).astype("uint8")
+    res = SegmentWrapper(img, thres)
 
     if show_time:
         total = time.time()-t
@@ -21,10 +21,36 @@ def SegmentImageByPath(img_path, thres, show_time = False):
 
     t = time.time()
 
-    res = SegmentWrapper(img.astype("int"), thres).astype("uint8")
+    res = SegmentWrapper(img, thres)
     if show_time:
         total = time.time()-t
 
         print("Time to segment = ", total)
 
     return res
+
+def RegionExtractImage(img, thres, show_time = False):
+    t = time.time()
+
+    res, reg = RegionExtractWrapper(img, thres)
+
+    if show_time:
+        total = time.time()-t
+
+        print("Time to segment = ", total)
+
+    return res, reg
+
+
+def RegionExtractByPath(img_path, thres, show_time = False):
+    img = cv.imread(img_path)
+
+    t = time.time()
+
+    res, reg = RegionExtractWrapper(img, thres)
+    if show_time:
+        total = time.time()-t
+
+        print("Time to segment = ", total)
+
+    return res, reg

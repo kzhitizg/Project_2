@@ -129,13 +129,6 @@ void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret)
     vector<vector<int>> lbl = label(img, thres);
 
     int r = x, c = y;
-    set<int> chk;
-    for (int i = 0; i < r; i++)
-    {
-        for (int j = 0; j < c; j++) {
-            chk.insert(lbl[i][j]);
-        }
-    }
 
     unordered_map<int, vector<int>> colmap;
     for (int i = 0; i < r; i++)
@@ -159,8 +152,53 @@ void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret)
                 color = colmap[lbl[i][j]];
                 for (int k = 0; k < z; k++)
                 {
-                    *(ret+z*(y*i+j)+k) = color[k];
+                    *(ret+z*(y*i+j)+k) = (ARR_TYPE) color[k];
                 }
         }
     }
+}
+
+int get_regions(unsigned char * n, int x, int y, int z, int thres, ARR_TYPE *ret, int *count){
+    MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
+
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++)
+        {
+            for (int k = 0; k < z; k++)
+            {
+                img[i][j][k] = (int) *(n+z*(y*i+j)+k);
+            }
+        }
+        
+    }
+
+    vector<vector<int>> lbl = label(img, thres);
+
+    int r = x, c = y;
+
+    unordered_map<int, int> lblmap;
+    int till_now = 0;
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++) {
+            if (lblmap.find(lbl[i][j]) == lblmap.end()) {
+                lblmap[lbl[i][j]] = till_now++;
+            }
+        }
+    }
+
+    for (int i = 0; i < till_now; i++)
+    {
+        *(count + i) = 0;
+    }
+    
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++) {
+            *(ret+(y*i+j)) = (ARR_TYPE) lblmap[lbl[i][j]];
+            *(count+lblmap[lbl[i][j]]) += 1;
+        }
+    }
+    return till_now;
 }
