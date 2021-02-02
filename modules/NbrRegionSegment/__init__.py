@@ -1,4 +1,4 @@
-from .NbrRegionSegment import *
+from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper
 import cv2 as cv
 import numpy as np
 import time
@@ -6,7 +6,7 @@ import time
 def SegmentImage(img, thres, show_time = False):
     t = time.time()
 
-    res = SegmentWrapper(img, thres)
+    res = _SegmentWrapper(img, thres)
 
     if show_time:
         total = time.time()-t
@@ -21,7 +21,7 @@ def SegmentImageByPath(img_path, thres, show_time = False):
 
     t = time.time()
 
-    res = SegmentWrapper(img, thres)
+    res = _SegmentWrapper(img, thres)
     if show_time:
         total = time.time()-t
 
@@ -32,7 +32,7 @@ def SegmentImageByPath(img_path, thres, show_time = False):
 def RegionExtractImage(img, thres, show_time = False):
     t = time.time()
 
-    res, reg = RegionExtractWrapper(img, thres)
+    res, reg = _RegionExtractWrapper(img, thres)
 
     if show_time:
         total = time.time()-t
@@ -47,7 +47,7 @@ def RegionExtractByPath(img_path, thres, show_time = False):
 
     t = time.time()
 
-    res, reg = RegionExtractWrapper(img, thres)
+    res, reg = _RegionExtractWrapper(img, thres)
     if show_time:
         total = time.time()-t
 

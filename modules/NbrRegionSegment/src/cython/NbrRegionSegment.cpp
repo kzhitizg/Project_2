@@ -1739,11 +1739,11 @@ static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_regions[] = "regions";
 static const char __pyx_k_zeros_like[] = "zeros_like";
 static const char __pyx_k_ImportError[] = "ImportError";
-static const char __pyx_k_SegmentWrapper[] = "SegmentWrapper";
+static const char __pyx_k_SegmentWrapper[] = "_SegmentWrapper";
 static const char __pyx_k_NbrRegionSegment[] = "NbrRegionSegment";
 static const char __pyx_k_ascontiguousarray[] = "ascontiguousarray";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
-static const char __pyx_k_RegionExtractWrapper[] = "RegionExtractWrapper";
+static const char __pyx_k_RegionExtractWrapper[] = "_RegionExtractWrapper";
 static const char __pyx_k_Pyx_Wrapper_to_enable_the_use_o[] = "\nPyx Wrapper to enable the use of cpp function as regular python function\n";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_src_cython_NbrRegionSegment_pyx[] = "src\\cython\\NbrRegionSegment.pyx";
@@ -1772,8 +1772,8 @@ static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_thres;
 static PyObject *__pyx_n_s_zeros;
 static PyObject *__pyx_n_s_zeros_like;
-static PyObject *__pyx_pf_16NbrRegionSegment_SegmentWrapper(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyObject *__pyx_v_thres); /* proto */
-static PyObject *__pyx_pf_16NbrRegionSegment_2RegionExtractWrapper(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyObject *__pyx_v_thres); /* proto */
+static PyObject *__pyx_pf_16NbrRegionSegment__SegmentWrapper(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyObject *__pyx_v_thres); /* proto */
+static PyObject *__pyx_pf_16NbrRegionSegment_2_RegionExtractWrapper(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyObject *__pyx_v_thres); /* proto */
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
@@ -1785,15 +1785,15 @@ static PyObject *__pyx_codeobj__6;
 /* "NbrRegionSegment.pyx":13
  *     cdef int get_regions(unsigned char * n, int x, int y, int z, int thres, unsigned char *ret, int *count)
  * 
- * def SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
+ * def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16NbrRegionSegment_1SegmentWrapper(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_16NbrRegionSegment_1SegmentWrapper = {"SegmentWrapper", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_16NbrRegionSegment_1SegmentWrapper, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_16NbrRegionSegment_1SegmentWrapper(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16NbrRegionSegment_1_SegmentWrapper(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_16NbrRegionSegment_1_SegmentWrapper = {"_SegmentWrapper", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_16NbrRegionSegment_1_SegmentWrapper, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_16NbrRegionSegment_1_SegmentWrapper(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_X = 0;
   PyObject *__pyx_v_thres = 0;
   int __pyx_lineno = 0;
@@ -1801,7 +1801,7 @@ static PyObject *__pyx_pw_16NbrRegionSegment_1SegmentWrapper(PyObject *__pyx_sel
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("SegmentWrapper (wrapper)", 0);
+  __Pyx_RefNannySetupContext("_SegmentWrapper (wrapper)", 0);
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_X,&__pyx_n_s_thres,0};
     PyObject* values[2] = {0,0};
@@ -1825,11 +1825,11 @@ static PyObject *__pyx_pw_16NbrRegionSegment_1SegmentWrapper(PyObject *__pyx_sel
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_thres)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("SegmentWrapper", 1, 2, 2, 1); __PYX_ERR(0, 13, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_SegmentWrapper", 1, 2, 2, 1); __PYX_ERR(0, 13, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "SegmentWrapper") < 0)) __PYX_ERR(0, 13, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_SegmentWrapper") < 0)) __PYX_ERR(0, 13, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -1842,14 +1842,14 @@ static PyObject *__pyx_pw_16NbrRegionSegment_1SegmentWrapper(PyObject *__pyx_sel
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("SegmentWrapper", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 13, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_SegmentWrapper", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 13, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("NbrRegionSegment.SegmentWrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("NbrRegionSegment._SegmentWrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) __PYX_ERR(0, 13, __pyx_L1_error)
-  __pyx_r = __pyx_pf_16NbrRegionSegment_SegmentWrapper(__pyx_self, __pyx_v_X, __pyx_v_thres);
+  __pyx_r = __pyx_pf_16NbrRegionSegment__SegmentWrapper(__pyx_self, __pyx_v_X, __pyx_v_thres);
 
   /* function exit code */
   goto __pyx_L0;
@@ -1860,7 +1860,7 @@ static PyObject *__pyx_pw_16NbrRegionSegment_1SegmentWrapper(PyObject *__pyx_sel
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16NbrRegionSegment_SegmentWrapper(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyObject *__pyx_v_thres) {
+static PyObject *__pyx_pf_16NbrRegionSegment__SegmentWrapper(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyObject *__pyx_v_thres) {
   PyArrayObject *__pyx_v_Y = 0;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_X;
   __Pyx_Buffer __pyx_pybuffer_X;
@@ -1887,7 +1887,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_SegmentWrapper(CYTHON_UNUSED PyObje
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("SegmentWrapper", 0);
+  __Pyx_RefNannySetupContext("_SegmentWrapper", 0);
   __Pyx_INCREF((PyObject *)__pyx_v_X);
   __pyx_pybuffer_Y.pybuffer.buf = NULL;
   __pyx_pybuffer_Y.refcount = 0;
@@ -1904,7 +1904,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_SegmentWrapper(CYTHON_UNUSED PyObje
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_X.diminfo[2].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_X.diminfo[2].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[2];
 
   /* "NbrRegionSegment.pyx":15
- * def SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
+ * def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)             # <<<<<<<<<<<<<<
  * 
@@ -2049,7 +2049,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_SegmentWrapper(CYTHON_UNUSED PyObje
  *     # Return array
  *     return Y             # <<<<<<<<<<<<<<
  * 
- * def RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
+ * def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(((PyObject *)__pyx_v_Y));
@@ -2059,7 +2059,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_SegmentWrapper(CYTHON_UNUSED PyObje
   /* "NbrRegionSegment.pyx":13
  *     cdef int get_regions(unsigned char * n, int x, int y, int z, int thres, unsigned char *ret, int *count)
  * 
- * def SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
+ * def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)
  */
@@ -2076,7 +2076,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_SegmentWrapper(CYTHON_UNUSED PyObje
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_Y.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("NbrRegionSegment.SegmentWrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("NbrRegionSegment._SegmentWrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -2093,15 +2093,15 @@ static PyObject *__pyx_pf_16NbrRegionSegment_SegmentWrapper(CYTHON_UNUSED PyObje
 /* "NbrRegionSegment.pyx":26
  *     return Y
  * 
- * def RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
+ * def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_16NbrRegionSegment_3RegionExtractWrapper(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_16NbrRegionSegment_3RegionExtractWrapper = {"RegionExtractWrapper", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_16NbrRegionSegment_3RegionExtractWrapper, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_16NbrRegionSegment_3RegionExtractWrapper(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_16NbrRegionSegment_3_RegionExtractWrapper(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_16NbrRegionSegment_3_RegionExtractWrapper = {"_RegionExtractWrapper", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_16NbrRegionSegment_3_RegionExtractWrapper, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_16NbrRegionSegment_3_RegionExtractWrapper(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_X = 0;
   PyObject *__pyx_v_thres = 0;
   int __pyx_lineno = 0;
@@ -2109,7 +2109,7 @@ static PyObject *__pyx_pw_16NbrRegionSegment_3RegionExtractWrapper(PyObject *__p
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("RegionExtractWrapper (wrapper)", 0);
+  __Pyx_RefNannySetupContext("_RegionExtractWrapper (wrapper)", 0);
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_X,&__pyx_n_s_thres,0};
     PyObject* values[2] = {0,0};
@@ -2133,11 +2133,11 @@ static PyObject *__pyx_pw_16NbrRegionSegment_3RegionExtractWrapper(PyObject *__p
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_thres)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("RegionExtractWrapper", 1, 2, 2, 1); __PYX_ERR(0, 26, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_RegionExtractWrapper", 1, 2, 2, 1); __PYX_ERR(0, 26, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "RegionExtractWrapper") < 0)) __PYX_ERR(0, 26, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_RegionExtractWrapper") < 0)) __PYX_ERR(0, 26, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -2150,14 +2150,14 @@ static PyObject *__pyx_pw_16NbrRegionSegment_3RegionExtractWrapper(PyObject *__p
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("RegionExtractWrapper", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 26, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_RegionExtractWrapper", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 26, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("NbrRegionSegment.RegionExtractWrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("NbrRegionSegment._RegionExtractWrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) __PYX_ERR(0, 26, __pyx_L1_error)
-  __pyx_r = __pyx_pf_16NbrRegionSegment_2RegionExtractWrapper(__pyx_self, __pyx_v_X, __pyx_v_thres);
+  __pyx_r = __pyx_pf_16NbrRegionSegment_2_RegionExtractWrapper(__pyx_self, __pyx_v_X, __pyx_v_thres);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2168,7 +2168,7 @@ static PyObject *__pyx_pw_16NbrRegionSegment_3RegionExtractWrapper(PyObject *__p
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_16NbrRegionSegment_2RegionExtractWrapper(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyObject *__pyx_v_thres) {
+static PyObject *__pyx_pf_16NbrRegionSegment_2_RegionExtractWrapper(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyObject *__pyx_v_thres) {
   PyArrayObject *__pyx_v_Y = 0;
   PyArrayObject *__pyx_v_regions = 0;
   int __pyx_v_reg;
@@ -2201,7 +2201,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_2RegionExtractWrapper(CYTHON_UNUSED
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("RegionExtractWrapper", 0);
+  __Pyx_RefNannySetupContext("_RegionExtractWrapper", 0);
   __Pyx_INCREF((PyObject *)__pyx_v_X);
   __pyx_pybuffer_Y.pybuffer.buf = NULL;
   __pyx_pybuffer_Y.refcount = 0;
@@ -2222,7 +2222,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_2RegionExtractWrapper(CYTHON_UNUSED
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1]; __pyx_pybuffernd_X.diminfo[2].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[2]; __pyx_pybuffernd_X.diminfo[2].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[2];
 
   /* "NbrRegionSegment.pyx":28
- * def RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
+ * def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)             # <<<<<<<<<<<<<<
  * 
@@ -2450,7 +2450,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_2RegionExtractWrapper(CYTHON_UNUSED
   /* "NbrRegionSegment.pyx":26
  *     return Y
  * 
- * def RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
+ * def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)
  */
@@ -2469,7 +2469,7 @@ static PyObject *__pyx_pf_16NbrRegionSegment_2RegionExtractWrapper(CYTHON_UNUSED
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_Y.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_regions.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("NbrRegionSegment.RegionExtractWrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("NbrRegionSegment._RegionExtractWrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -3436,7 +3436,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "NbrRegionSegment.pyx":13
  *     cdef int get_regions(unsigned char * n, int x, int y, int z, int thres, unsigned char *ret, int *count)
  * 
- * def SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
+ * def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)
  */
@@ -3448,7 +3448,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "NbrRegionSegment.pyx":26
  *     return Y
  * 
- * def RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
+ * def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)
  */
@@ -3783,11 +3783,11 @@ if (!__Pyx_RefNanny) {
   /* "NbrRegionSegment.pyx":13
  *     cdef int get_regions(unsigned char * n, int x, int y, int z, int thres, unsigned char *ret, int *count)
  * 
- * def SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
+ * def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16NbrRegionSegment_1SegmentWrapper, NULL, __pyx_n_s_NbrRegionSegment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16NbrRegionSegment_1_SegmentWrapper, NULL, __pyx_n_s_NbrRegionSegment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_SegmentWrapper, __pyx_t_1) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -3795,11 +3795,11 @@ if (!__Pyx_RefNanny) {
   /* "NbrRegionSegment.pyx":26
  *     return Y
  * 
- * def RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
+ * def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):             # <<<<<<<<<<<<<<
  *     # Make the array allocation continuous
  *     X = np.ascontiguousarray(X)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16NbrRegionSegment_3RegionExtractWrapper, NULL, __pyx_n_s_NbrRegionSegment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_16NbrRegionSegment_3_RegionExtractWrapper, NULL, __pyx_n_s_NbrRegionSegment); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_RegionExtractWrapper, __pyx_t_1) < 0) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;

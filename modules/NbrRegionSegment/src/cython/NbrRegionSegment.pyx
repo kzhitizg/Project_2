@@ -1,5 +1,8 @@
 """
-Pyx Wrapper to enable the use of cpp function as regular python function
+Pyx Wrapper to enable the use of cpp function as python function
+
+Due to type conventions, this module should not be used directly, the python module defined should be used instead
+Adding underscore will prevent unintentional exports, thus all function defined shoud begin with underscore
 """
 
 import numpy as np
@@ -10,7 +13,7 @@ cdef extern from "../cpp/NbrRegionSegment.h":
     cdef void segment(unsigned char *n, int x, int y, int z, int thres, unsigned char *Y)
     cdef int get_regions(unsigned char * n, int x, int y, int z, int thres, unsigned char *ret, int *count)
 
-def SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
+def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
     # Make the array allocation continuous
     X = np.ascontiguousarray(X)
 
@@ -23,7 +26,7 @@ def SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
     # Return array
     return Y
 
-def RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
+def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
     # Make the array allocation continuous
     X = np.ascontiguousarray(X)
 
