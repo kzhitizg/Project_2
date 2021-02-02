@@ -1,6 +1,4 @@
-from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper
-import cv2 as cv
-import numpy as np
+from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrapper, _RemoveBG
 import time
 
 def SegmentImage(img, thres, show_time = False):
@@ -15,21 +13,7 @@ def SegmentImage(img, thres, show_time = False):
 
     return res
 
-
-def SegmentImageByPath(img_path, thres, show_time = False):
-    img = cv.imread(img_path)
-
-    t = time.time()
-
-    res = _SegmentWrapper(img, thres)
-    if show_time:
-        total = time.time()-t
-
-        print("Time to segment = ", total)
-
-    return res
-
-def RegionExtractImage(img, thres, show_time = False):
+def RegionExtract(img, thres, show_time = False):
     t = time.time()
 
     res, reg = _RegionExtractWrapper(img, thres)
@@ -41,16 +25,26 @@ def RegionExtractImage(img, thres, show_time = False):
 
     return res, reg
 
-
-def RegionExtractByPath(img_path, thres, show_time = False):
-    img = cv.imread(img_path)
-
+def RemoveBG(img, thres1, thres2, show_time = False):
     t = time.time()
 
-    res, reg = _RegionExtractWrapper(img, thres)
+    ret = _RemoveBG(img, thres1, thres2)
+
     if show_time:
         total = time.time()-t
 
-        print("Time to segment = ", total)
+        print("Time to Remove BG = ", total)
 
-    return res, reg
+    return ret
+
+def GetBgMap(label_map, thres, reg_count, show_time=False):
+    t = time.time()
+
+    ret, mp = _GetBGWrapper(label_map, thres, reg_count)
+
+    if show_time:
+        total = time.time()-t
+
+        print("Time to Get map = ", total)
+
+    return ret, mp

@@ -52,6 +52,56 @@ void bar(int part, int total){
     progress += 0.16; // for demonstration only
 }
 
+int shouldRemove(vector<int> vals){
+    unordered_map<int, int> mp;
+
+    for (auto &&i : vals)
+    {
+        // cout << (mp[i]) << endl;
+        mp[i]++;
+    }
+    
+    for (auto &&i : mp)
+    {
+        if (i.second > 5){
+            // del mp;
+            return i.first;
+        }
+    }
+    return -1;
+}
+
+void removeNoise(vector<vector<int>> &lbl){
+    vector<int> vals(9, 0);
+    int c = 0, v;
+    int total = 0;
+    for (int i = 1; i < lbl.size()-1; i++)
+    {
+        for (int j = 1; j < lbl[0].size()-1; j++)
+        {
+            // total += 1;
+            // if (total % 10000 == 0){
+
+            //     bar(total , (lbl.size()*lbl[0].size()));
+            // }
+            fill(vals.begin(), vals.end(), 0);
+            c = 0;
+            for (int a = i-1; a <= i+1; a++)
+            {
+                for (int b = j-1; b <= j+1; b++)
+                {
+                    vals[c++] = lbl[a][b];
+                }
+            }
+            
+            v = shouldRemove(vals);
+            if (v != -1){
+                lbl[i][j] = v;
+            }
+        }
+    }
+}
+
 // Function to assign label to each region in the image
 vector<vector<int>> label(MAT3D &grid, int thres) {
     int r = grid.size();
@@ -89,7 +139,7 @@ vector<vector<int>> label(MAT3D &grid, int thres) {
         }
     }
 
-    // cout << endl;
+    cout << endl;
     for (auto x : eqtable) {
         int tmp = x.second;
         while (eqtable.find(tmp) != eqtable.end()) {
@@ -106,6 +156,8 @@ vector<vector<int>> label(MAT3D &grid, int thres) {
             }
         }
     }
+    removeNoise(lbl);
+
     return lbl;
 }
 
@@ -158,7 +210,7 @@ void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret)
     }
 }
 
-int get_regions(unsigned char * n, int x, int y, int z, int thres, ARR_TYPE *ret, int *count){
+int getRegions(unsigned char * n, int x, int y, int z, int thres, int *ret, int *count){
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
     for (int i = 0; i < x; i++)
@@ -196,9 +248,84 @@ int get_regions(unsigned char * n, int x, int y, int z, int thres, ARR_TYPE *ret
     for (int i = 0; i < r; i++)
     {
         for (int j = 0; j < c; j++) {
-            *(ret+(y*i+j)) = (ARR_TYPE) lblmap[lbl[i][j]];
+            *(ret+(y*i+j)) = lblmap[lbl[i][j]];
             *(count+lblmap[lbl[i][j]]) += 1;
         }
     }
     return till_now;
+}
+
+void removeMap(int * n, int x, int y, int thres, int *count, int regs, bool *ret){
+    set<int> to_remove;
+    for (int i = 0; i < regs; i++)
+    {
+        if (*(count+i) >= thres){
+            to_remove.insert(i);
+        }
+    }
+    
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++) {
+            if (to_remove.find(*(n+(y*i+j))) != to_remove.end()){
+                *(ret+(y*i+j)) = true;
+            } else{
+                *(ret+(y*i+j)) = false;
+            }
+        }
+    }
+}
+
+void segmentAndRemove(ARR_TYPE * n, int x, int y, int z, int thres1, int thres2, ARR_TYPE *ret){
+    MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
+
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++)
+        {
+            for (int k = 0; k < z; k++)
+            {
+                img[i][j][k] = (int) *(n+z*(y*i+j)+k);
+            }
+        }
+        
+    }
+
+    vector<vector<int>> lbl = label(img, thres1);
+
+    int r = x, c = y;
+
+    unordered_map<int, int> lblcount;
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++) {
+            lblcount[lbl[i][j]]++;
+        }
+    }
+
+    set<int> to_remove;
+    for (auto &&i:lblcount)
+    {
+        if (i.second >= thres2){
+            to_remove.insert(i.first);
+        }
+    }
+    bool remove;
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++) {
+            if (to_remove.find(lbl[i][j]) != to_remove.end()){
+                remove = true;
+            } else{
+                remove = false;
+            }
+            for (int k = 0; k < z; k++){
+                if (remove){
+                    *(ret+z*(y*i+j)+k) = (ARR_TYPE) 0;
+                } else {
+                    *(ret+z*(y*i+j)+k) = *(n+z*(y*i+j)+k);
+                }
+            }
+        }
+    }
 }
