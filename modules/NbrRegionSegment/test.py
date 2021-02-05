@@ -1,4 +1,4 @@
-from NbrRegionSegment import _RegionExtractWrapper, _SegmentWrapper, _RemoveRegionsWrapper, _RemoveBG
+from NbrRegionSegment import _RegionExtractWrapper, _SegmentWrapper, _RemoveBG
 
 import cv2 as cv
 import numpy as np
