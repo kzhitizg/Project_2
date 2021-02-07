@@ -235,7 +235,7 @@ void segment(ARR_TYPE *n, int x, int y, int z, int thres, ARR_TYPE *ret)
     }
 }
 
-int getRegions(unsigned char *n, int x, int y, int z, int thres, int *ret, int *count)
+int getRegions(unsigned char *n, unsigned char *l, int x, int y, int z, int thres, int *ret, int *count)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 

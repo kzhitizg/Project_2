@@ -42,16 +42,17 @@ def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
     # Return array
     return Y
 
-def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, thres):
+def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, np.ndarray[unsigned char, ndim=1] lbp, thres):
     # Make the array allocation continuous
     X = np.ascontiguousarray(X)
+    lbp = np.ascontiguousarray(lbp)
 
     # Create c type array to store result
     cdef np.ndarray[int, ndim=2, mode="c"] Y = np.zeros((X.shape[0], X.shape[1]), dtype = "int32")
     cdef np.ndarray[int, ndim=1, mode="c"] regions = np.zeros((X.shape[0]*X.shape[1]), dtype= "int32")
     
     # Call the function
-    reg = getRegions(&X[0,0, 0], X.shape[0], X.shape[1], X.shape[2], thres, &Y[0, 0], &regions[0])
+    reg = getRegions(&X[0,0, 0], &lbp[0, 0], X.shape[0], X.shape[1], X.shape[2], thres, &Y[0, 0], &regions[0])
 
     # Return array
     return Y, regions[:reg]

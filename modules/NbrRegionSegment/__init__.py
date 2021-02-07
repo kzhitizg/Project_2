@@ -1,7 +1,8 @@
 from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrapper, _RemoveBG
 import time
 
-def SegmentImage(img, thres, show_time = False):
+
+def SegmentImage(img, thres, show_time=False):
     t = time.time()
 
     res = _SegmentWrapper(img, thres)
@@ -13,10 +14,11 @@ def SegmentImage(img, thres, show_time = False):
 
     return res
 
-def RegionExtract(img, thres, show_time = False):
+
+def RegionExtract(img, lbp, thres, show_time=False):
     t = time.time()
 
-    res, reg = _RegionExtractWrapper(img, thres)
+    res, reg = _RegionExtractWrapper(img, lbp, thres)
 
     if show_time:
         total = time.time()-t
@@ -25,7 +27,8 @@ def RegionExtract(img, thres, show_time = False):
 
     return res, reg
 
-def RemoveBG(img, thres1, thres2, show_time = False):
+
+def RemoveBG(img, thres1, thres2, show_time=False):
     t = time.time()
 
     ret = _RemoveBG(img, thres1, thres2)
@@ -36,6 +39,7 @@ def RemoveBG(img, thres1, thres2, show_time = False):
         print("Time to Remove BG = ", total)
 
     return ret
+
 
 def GetBgMap(label_map, thres, reg_count, show_time=False):
     t = time.time()
