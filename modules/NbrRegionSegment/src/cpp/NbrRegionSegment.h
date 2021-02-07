@@ -1,5 +1,10 @@
 #include <iostream>
-#include <bits/stdc++.h>
+#include <map>
+#include <unordered_map>
+#include <vector>
+#include <math.h>
+#include <set>
+#include <algorithm>
 
 #define ARR_TYPE unsigned char
 #define MAT2D vector<vector<int>>
@@ -7,7 +12,7 @@
 
 // These Function will be exported
 
-void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret);
+void segment(ARR_TYPE *n, int x, int y, int z, int thres, ARR_TYPE *ret);
 /*  
     n = 3d input image,
     (x,y,z) = size of image, 
@@ -15,7 +20,7 @@ void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret);
     ret = 3d array to store output 
 */
 
-void removeMap(int * n, int x, int y, int thres, int *count, int regs, bool *ret);
+void removeMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret);
 /*
     n = 2d input label map,
     (x, y, z) = size of image, 
@@ -25,7 +30,7 @@ void removeMap(int * n, int x, int y, int thres, int *count, int regs, bool *ret
     ret = 2d array to store output 
 */
 
-void segmentAndRemove(ARR_TYPE * n, int x, int y, int z, int thres1, int thres2, ARR_TYPE *ret);
+void segmentAndRemove(ARR_TYPE *n, int x, int y, int z, int thres1, int thres2, ARR_TYPE *ret);
 /*
     n = 2d input label map,
     (x, y, z) = size of image, 
@@ -35,7 +40,7 @@ void segmentAndRemove(ARR_TYPE * n, int x, int y, int z, int thres1, int thres2,
     ret = 2d array to store output 
 */
 
-int getRegions(ARR_TYPE * n, int x, int y, int z, int thres, int *ret, int *count);
+int getRegions(ARR_TYPE *n, int x, int y, int z, int thres, int *ret, int *count);
 /*
     n = 3d input image,
     (x,y,z) = size of image, 

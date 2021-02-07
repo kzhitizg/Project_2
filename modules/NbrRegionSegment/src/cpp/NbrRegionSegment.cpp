@@ -1,9 +1,11 @@
 #include "NbrRegionSegment.h"
+// #include <bits/stdc++.h>
 
 using namespace std;
 
 // To add a region mapping to the table
-void add(map<int, int>& eqtable, int v1, int v2) {
+void add(map<int, int> &eqtable, int v1, int v2)
+{
     int mn = min(v1, v2);
     int mx = max(v1, v2);
     if ((eqtable).find(mx) != (eqtable).end() && (eqtable)[mx] != mn)
@@ -12,8 +14,10 @@ void add(map<int, int>& eqtable, int v1, int v2) {
 }
 
 // Function to Calculate the euclidean distance between two same size vectors
-float norm(vector<int> &p1, vector<int> &p2){
-    if (p1.size() != p2.size()){
+float norm(vector<int> &p1, vector<int> &p2)
+{
+    if (p1.size() != p2.size())
+    {
         throw length_error("Error calculating eculidean distance between unequal size arrays");
     }
 
@@ -21,13 +25,14 @@ float norm(vector<int> &p1, vector<int> &p2){
 
     for (int i = 0; i < p1.size(); i++)
     {
-        res += pow(p1[i]-p2[i], 2);
+        res += pow(p1[i] - p2[i], 2);
     }
     return sqrt(res);
 }
 
 // Fucntion to check the merging criteria
-bool match(int i1, int j1, int i2, int j2, MAT3D &grid, int thres) {
+bool match(int i1, int j1, int i2, int j2, MAT3D &grid, int thres)
+{
     vector<int> p1 = grid[i1][j1], p2 = grid[i2][j2];
     if (norm(p1, p2) < thres)
         return true;
@@ -35,16 +40,21 @@ bool match(int i1, int j1, int i2, int j2, MAT3D &grid, int thres) {
 }
 
 // Function to print the bar
-void bar(int part, int total){
+void bar(int part, int total)
+{
     int barWidth = 70;
     float progress = ((float)part) / total;
 
     std::cout << "[";
     int pos = barWidth * progress;
-    for (int i = 0; i < barWidth; ++i) {
-        if (i < pos) std::cout << "=";
-        else if (i == pos) std::cout << ">";
-        else std::cout << " ";
+    for (int i = 0; i < barWidth; ++i)
+    {
+        if (i < pos)
+            std::cout << "=";
+        else if (i == pos)
+            std::cout << ">";
+        else
+            std::cout << " ";
     }
     std::cout << "] " << part << " / " << total << "\r";
     std::cout.flush();
@@ -52,7 +62,8 @@ void bar(int part, int total){
     progress += 0.16; // for demonstration only
 }
 
-int shouldRemove(vector<int> vals){
+int shouldRemove(vector<int> vals)
+{
     unordered_map<int, int> mp;
 
     for (auto &&i : vals)
@@ -60,10 +71,11 @@ int shouldRemove(vector<int> vals){
         // cout << (mp[i]) << endl;
         mp[i]++;
     }
-    
+
     for (auto &&i : mp)
     {
-        if (i.second > 5){
+        if (i.second > 5)
+        {
             // del mp;
             return i.first;
         }
@@ -71,13 +83,14 @@ int shouldRemove(vector<int> vals){
     return -1;
 }
 
-void removeNoise(vector<vector<int>> &lbl){
+void removeNoise(vector<vector<int>> &lbl)
+{
     vector<int> vals(9, 0);
     int c = 0, v;
     int total = 0;
-    for (int i = 1; i < lbl.size()-1; i++)
+    for (int i = 1; i < lbl.size() - 1; i++)
     {
-        for (int j = 1; j < lbl[0].size()-1; j++)
+        for (int j = 1; j < lbl[0].size() - 1; j++)
         {
             // total += 1;
             // if (total % 10000 == 0){
@@ -86,16 +99,17 @@ void removeNoise(vector<vector<int>> &lbl){
             // }
             fill(vals.begin(), vals.end(), 0);
             c = 0;
-            for (int a = i-1; a <= i+1; a++)
+            for (int a = i - 1; a <= i + 1; a++)
             {
-                for (int b = j-1; b <= j+1; b++)
+                for (int b = j - 1; b <= j + 1; b++)
                 {
                     vals[c++] = lbl[a][b];
                 }
             }
-            
+
             v = shouldRemove(vals);
-            if (v != -1){
+            if (v != -1)
+            {
                 lbl[i][j] = v;
             }
         }
@@ -103,7 +117,8 @@ void removeNoise(vector<vector<int>> &lbl){
 }
 
 // Function to assign label to each region in the image
-vector<vector<int>> label(MAT3D &grid, int thres) {
+vector<vector<int>> label(MAT3D &grid, int thres)
+{
     int r = grid.size();
     int c = grid[0].size();
     vector<vector<int>> lbl(r, vector<int>(c, 0));
@@ -114,19 +129,24 @@ vector<vector<int>> label(MAT3D &grid, int thres) {
     {
         for (int j = 0; j < c; j++)
         {
-            if ((i > 0 && match(i, j, i - 1, j, grid, thres)) && (j > 0 && match(i, j, i, j - 1, grid, thres))) {
+            if ((i > 0 && match(i, j, i - 1, j, grid, thres)) && (j > 0 && match(i, j, i, j - 1, grid, thres)))
+            {
                 lbl[i][j] = lbl[i][j - 1];
-                    if (lbl[i][j - 1] != lbl[i - 1][j]) {
-                        add(eqtable, lbl[i - 1][j], lbl[i][j - 1]);
-                    }
+                if (lbl[i][j - 1] != lbl[i - 1][j])
+                {
+                    add(eqtable, lbl[i - 1][j], lbl[i][j - 1]);
+                }
             }
-            else if ((i > 0 && match(i, j, i - 1, j, grid, thres))) {
+            else if ((i > 0 && match(i, j, i - 1, j, grid, thres)))
+            {
                 lbl[i][j] = lbl[i - 1][j];
             }
-            else if ((j > 0 && match(i, j, i, j - 1, grid, thres))) {
+            else if ((j > 0 && match(i, j, i, j - 1, grid, thres)))
+            {
                 lbl[i][j] = lbl[i][j - 1];
             }
-            else {
+            else
+            {
                 lbl[i][j] = newcomp++;
             }
 
@@ -140,9 +160,11 @@ vector<vector<int>> label(MAT3D &grid, int thres) {
     }
 
     cout << endl;
-    for (auto x : eqtable) {
+    for (auto x : eqtable)
+    {
         int tmp = x.second;
-        while (eqtable.find(tmp) != eqtable.end()) {
+        while (eqtable.find(tmp) != eqtable.end())
+        {
             tmp = eqtable[tmp];
         }
         eqtable[x.first] = tmp;
@@ -150,9 +172,11 @@ vector<vector<int>> label(MAT3D &grid, int thres) {
 
     for (int i = 0; i < r; i++)
     {
-        for (int j = 0; j < c; j++) {
-                if (eqtable.find(lbl[i][j]) != eqtable.end()) {
-                    lbl[i][j] = eqtable[lbl[i][j]];
+        for (int j = 0; j < c; j++)
+        {
+            if (eqtable.find(lbl[i][j]) != eqtable.end())
+            {
+                lbl[i][j] = eqtable[lbl[i][j]];
             }
         }
     }
@@ -162,7 +186,7 @@ vector<vector<int>> label(MAT3D &grid, int thres) {
 }
 
 // Function to be exported. Takes image array as input and returns image with coloured regions
-void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret)
+void segment(ARR_TYPE *n, int x, int y, int z, int thres, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -172,10 +196,9 @@ void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret)
         {
             for (int k = 0; k < z; k++)
             {
-                img[i][j][k] = (int) *(n+z*(y*i+j)+k);
+                img[i][j][k] = (int)*(n + z * (y * i + j) + k);
             }
         }
-        
     }
 
     vector<vector<int>> lbl = label(img, thres);
@@ -185,13 +208,14 @@ void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret)
     unordered_map<int, vector<int>> colmap;
     for (int i = 0; i < r; i++)
     {
-        for (int j = 0; j < c; j++) {
-            if (colmap.find(lbl[i][j]) == colmap.end()) {
+        for (int j = 0; j < c; j++)
+        {
+            if (colmap.find(lbl[i][j]) == colmap.end())
+            {
                 colmap[lbl[i][j]] = vector<int>(3, 0);
                 colmap[lbl[i][j]][0] = 255 * rand();
                 colmap[lbl[i][j]][1] = 255 * rand();
                 colmap[lbl[i][j]][2] = 255 * rand();
-
             }
         }
     }
@@ -199,18 +223,20 @@ void segment(ARR_TYPE * n, int x, int y, int z, int thres, ARR_TYPE *ret)
 
     for (int i = 0; i < r; i++)
     {
-        for (int j = 0; j < c; j++) {
-            
-                color = colmap[lbl[i][j]];
-                for (int k = 0; k < z; k++)
-                {
-                    *(ret+z*(y*i+j)+k) = (ARR_TYPE) color[k];
-                }
+        for (int j = 0; j < c; j++)
+        {
+
+            color = colmap[lbl[i][j]];
+            for (int k = 0; k < z; k++)
+            {
+                *(ret + z * (y * i + j) + k) = (ARR_TYPE)color[k];
+            }
         }
     }
 }
 
-int getRegions(unsigned char * n, int x, int y, int z, int thres, int *ret, int *count){
+int getRegions(unsigned char *n, int x, int y, int z, int thres, int *ret, int *count)
+{
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
     for (int i = 0; i < x; i++)
@@ -219,10 +245,9 @@ int getRegions(unsigned char * n, int x, int y, int z, int thres, int *ret, int 
         {
             for (int k = 0; k < z; k++)
             {
-                img[i][j][k] = (int) *(n+z*(y*i+j)+k);
+                img[i][j][k] = (int)*(n + z * (y * i + j) + k);
             }
         }
-        
     }
 
     vector<vector<int>> lbl = label(img, thres);
@@ -233,8 +258,10 @@ int getRegions(unsigned char * n, int x, int y, int z, int thres, int *ret, int 
     int till_now = 0;
     for (int i = 0; i < r; i++)
     {
-        for (int j = 0; j < c; j++) {
-            if (lblmap.find(lbl[i][j]) == lblmap.end()) {
+        for (int j = 0; j < c; j++)
+        {
+            if (lblmap.find(lbl[i][j]) == lblmap.end())
+            {
                 lblmap[lbl[i][j]] = till_now++;
             }
         }
@@ -244,39 +271,47 @@ int getRegions(unsigned char * n, int x, int y, int z, int thres, int *ret, int 
     {
         *(count + i) = 0;
     }
-    
+
     for (int i = 0; i < r; i++)
     {
-        for (int j = 0; j < c; j++) {
-            *(ret+(y*i+j)) = lblmap[lbl[i][j]];
-            *(count+lblmap[lbl[i][j]]) += 1;
+        for (int j = 0; j < c; j++)
+        {
+            *(ret + (y * i + j)) = lblmap[lbl[i][j]];
+            *(count + lblmap[lbl[i][j]]) += 1;
         }
     }
     return till_now;
 }
 
-void removeMap(int * n, int x, int y, int thres, int *count, int regs, bool *ret){
+void removeMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret)
+{
     set<int> to_remove;
     for (int i = 0; i < regs; i++)
     {
-        if (*(count+i) >= thres){
+        if (*(count + i) >= thres)
+        {
             to_remove.insert(i);
         }
     }
-    
+
     for (int i = 0; i < x; i++)
     {
-        for (int j = 0; j < y; j++) {
-            if (to_remove.find(*(n+(y*i+j))) != to_remove.end()){
-                *(ret+(y*i+j)) = true;
-            } else{
-                *(ret+(y*i+j)) = false;
+        for (int j = 0; j < y; j++)
+        {
+            if (to_remove.find(*(n + (y * i + j))) != to_remove.end())
+            {
+                *(ret + (y * i + j)) = true;
+            }
+            else
+            {
+                *(ret + (y * i + j)) = false;
             }
         }
     }
 }
 
-void segmentAndRemove(ARR_TYPE * n, int x, int y, int z, int thres1, int thres2, ARR_TYPE *ret){
+void segmentAndRemove(ARR_TYPE *n, int x, int y, int z, int thres1, int thres2, ARR_TYPE *ret)
+{
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
     for (int i = 0; i < x; i++)
@@ -285,10 +320,9 @@ void segmentAndRemove(ARR_TYPE * n, int x, int y, int z, int thres1, int thres2,
         {
             for (int k = 0; k < z; k++)
             {
-                img[i][j][k] = (int) *(n+z*(y*i+j)+k);
+                img[i][j][k] = (int)*(n + z * (y * i + j) + k);
             }
         }
-        
     }
 
     vector<vector<int>> lbl = label(img, thres1);
@@ -298,32 +332,42 @@ void segmentAndRemove(ARR_TYPE * n, int x, int y, int z, int thres1, int thres2,
     unordered_map<int, int> lblcount;
     for (int i = 0; i < r; i++)
     {
-        for (int j = 0; j < c; j++) {
+        for (int j = 0; j < c; j++)
+        {
             lblcount[lbl[i][j]]++;
         }
     }
 
     set<int> to_remove;
-    for (auto &&i:lblcount)
+    for (auto &&i : lblcount)
     {
-        if (i.second >= thres2){
+        if (i.second >= thres2)
+        {
             to_remove.insert(i.first);
         }
     }
     bool remove;
     for (int i = 0; i < x; i++)
     {
-        for (int j = 0; j < y; j++) {
-            if (to_remove.find(lbl[i][j]) != to_remove.end()){
+        for (int j = 0; j < y; j++)
+        {
+            if (to_remove.find(lbl[i][j]) != to_remove.end())
+            {
                 remove = true;
-            } else{
+            }
+            else
+            {
                 remove = false;
             }
-            for (int k = 0; k < z; k++){
-                if (remove){
-                    *(ret+z*(y*i+j)+k) = (ARR_TYPE) 0;
-                } else {
-                    *(ret+z*(y*i+j)+k) = *(n+z*(y*i+j)+k);
+            for (int k = 0; k < z; k++)
+            {
+                if (remove)
+                {
+                    *(ret + z * (y * i + j) + k) = (ARR_TYPE)0;
+                }
+                else
+                {
+                    *(ret + z * (y * i + j) + k) = *(n + z * (y * i + j) + k);
                 }
             }
         }
