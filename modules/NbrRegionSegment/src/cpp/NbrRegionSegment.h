@@ -12,7 +12,7 @@
 
 // These Function will be exported
 
-void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, ARR_TYPE *ret);
+void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, ARR_TYPE *ret);
 /*  
     n = 3d input image,
     (x,y,z) = size of image, 

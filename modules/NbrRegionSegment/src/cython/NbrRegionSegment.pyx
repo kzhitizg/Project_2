@@ -11,7 +11,7 @@ from libcpp cimport bool
 
 # Import functions from header file
 cdef extern from "../cpp/NbrRegionSegment.h":
-    cdef void segment(unsigned char *n, unsigned char *l, int x, int y, int z, int thres, float w, unsigned char *Y)
+    cdef void segment(unsigned char *n, unsigned char *l, int x, int y, int z, int thres, float wr, float wg, float wc, unsigned char *Y)
     cdef int getRegions(unsigned char *n, unsigned char *l, int x, int y, int z, int thres, float w, int *ret, int *count)
     cdef void removeMap(int * n, int x, int y, int thres, int *count, int regs, bool *ret)
     cdef void segmentAndRemove(unsigned char * n, unsigned char *l, int x, int y, int z, int thres1, int thres2, float w, unsigned char *ret)
@@ -29,7 +29,7 @@ def _GetBGWrapper(np.ndarray[int, ndim=2] X, thres, np.ndarray[int, ndim=1] reg)
     # Return array
     return Y
 
-def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, np.ndarray[unsigned char, ndim=2] lbp, thres, w):
+def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, np.ndarray[unsigned char, ndim=2] lbp, thres, wr, wg, wc):
     # Make the array allocation continuous
     X = np.ascontiguousarray(X)
     lbp = np.ascontiguousarray(lbp)
@@ -38,7 +38,7 @@ def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, np.ndarray[unsigned cha
     cdef np.ndarray[unsigned char, ndim=3, mode="c"] Y = np.zeros_like(X)
     
     # Call the function
-    segment(&X[0,0, 0], &lbp[0, 0], X.shape[0], X.shape[1], X.shape[2], thres, w, &Y[0, 0, 0])
+    segment(&X[0,0, 0], &lbp[0, 0], X.shape[0], X.shape[1], X.shape[2], thres, wr, wg, wc, &Y[0, 0, 0])
 
     # Return array
     return Y

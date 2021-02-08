@@ -2,10 +2,10 @@ from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrap
 import time
 
 
-def SegmentImage(img, lbp, thres, w, show_time=False):
+def SegmentImage(img, lbp, thres, wr, wg, wc, show_time=False):
     t = time.time()
 
-    res = _SegmentWrapper(img, lbp, thres, w)
+    res = _SegmentWrapper(img, lbp, thres, wr, wg, wc)
 
     if show_time:
         total = time.time()-t

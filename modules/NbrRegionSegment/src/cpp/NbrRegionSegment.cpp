@@ -39,11 +39,24 @@ bool match(int i1, int j1, int i2, int j2, MAT3D &grid, int thres)
     return false;
 }
 
+//function to get the score of 2 pixels
+float score(vector<int> p1, vector<int> p2, float wr, float wg)
+{
+    if (p1.size() != p2.size())
+    {
+        throw length_error("Error calculating eculidean distance between unequal size arrays");
+    }
+
+    float res = wr * abs(p1[0] - p2[0]) + wg * abs(p1[1] - p2[1]) + (1 - wr - wg) * abs(p1[2] - p2[2]);
+
+    return res;
+}
+
 // Fucntion to check the merging criteria
-bool matchLbp(int i1, int j1, int i2, int j2, MAT3D &grid, int thres, MAT2D &lbp, float w)
+bool matchLbp(int i1, int j1, int i2, int j2, MAT3D &grid, int thres, MAT2D &lbp, float wr, float wg, float wc)
 {
     vector<int> p1 = grid[i1][j1], p2 = grid[i2][j2];
-    float diff = norm(p1, p2) + w*abs(lbp[i1][j1] - lbp[i2][j2]);
+    float diff = wc * score(p1, p2, wr, wg) + (1 - wc) * abs(lbp[i1][j1] - lbp[i2][j2]);
     if (diff < thres)
         return true;
     return false;
@@ -196,7 +209,7 @@ vector<vector<int>> label(MAT3D &grid, int thres)
 }
 
 // Function to assign label to each region in the image
-vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float w)
+vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.2, float wg = 0.2, float wc = 0.7)
 {
     int r = grid.size();
     int c = grid[0].size();
@@ -208,7 +221,7 @@ vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float w)
     {
         for (int j = 0; j < c; j++)
         {
-            if ((i > 0 && matchLbp(i, j, i - 1, j, grid, thres, lbp, w)) && (j > 0 && matchLbp(i, j, i, j - 1, grid, thres, lbp, w)))
+            if ((i > 0 && matchLbp(i, j, i - 1, j, grid, thres, lbp, wr, wg, wc)) && (j > 0 && matchLbp(i, j, i, j - 1, grid, thres, lbp, wr, wg, wc)))
             {
                 lbl[i][j] = lbl[i][j - 1];
                 if (lbl[i][j - 1] != lbl[i - 1][j])
@@ -265,7 +278,7 @@ vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float w)
 }
 
 // Function to be exported. Takes image array as input and returns image with coloured regions
-void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, ARR_TYPE *ret)
+void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -290,7 +303,7 @@ void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, 
         }
     }
 
-    vector<vector<int>> lbl = labelv2(img, thres, lbp, w);
+    vector<vector<int>> lbl = labelv2(img, thres, lbp, wr, wg, wc);
 
     int r = x, c = y;
 
