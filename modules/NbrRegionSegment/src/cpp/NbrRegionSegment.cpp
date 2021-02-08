@@ -278,7 +278,7 @@ vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.2, 
 }
 
 // Function to be exported. Takes image array as input and returns image with coloured regions
-void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, ARR_TYPE *ret)
+void Segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -337,7 +337,7 @@ void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr,
     }
 }
 
-int getRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, int *ret, int *count)
+int GetRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, int *ret, int *count)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -395,7 +395,7 @@ int getRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w
     return till_now;
 }
 
-void removeMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret)
+void RemoveMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret)
 {
     set<int> to_remove;
     for (int i = 0; i < regs; i++)
@@ -422,7 +422,7 @@ void removeMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret)
     }
 }
 
-void segmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float w, ARR_TYPE *ret)
+void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float w, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 

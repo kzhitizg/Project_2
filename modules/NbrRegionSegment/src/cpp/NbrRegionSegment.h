@@ -12,7 +12,7 @@
 
 // These Function will be exported
 
-void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, ARR_TYPE *ret);
+void Segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, ARR_TYPE *ret);
 /*  
     n = 3d input image,
     (x,y,z) = size of image, 
@@ -20,7 +20,7 @@ void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr,
     ret = 3d array to store output 
 */
 
-void removeMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret);
+void RemoveMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret);
 /*
     n = 2d input label map,
     (x, y, z) = size of image, 
@@ -30,7 +30,7 @@ void removeMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret)
     ret = 2d array to store output 
 */
 
-void segmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float w, ARR_TYPE *ret);
+void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float w, ARR_TYPE *ret);
 /*
     n = 2d input label map,
     (x, y, z) = size of image, 
@@ -40,7 +40,7 @@ void segmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1,
     ret = 2d array to store output 
 */
 
-int getRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, int *ret, int *count);
+int GetRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, int *ret, int *count);
 /*
     n = 3d input image,
     (x,y,z) = size of image, 
