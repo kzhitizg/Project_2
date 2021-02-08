@@ -39,6 +39,16 @@ bool match(int i1, int j1, int i2, int j2, MAT3D &grid, int thres)
     return false;
 }
 
+// Fucntion to check the merging criteria
+bool matchLbp(int i1, int j1, int i2, int j2, MAT3D &grid, int thres, MAT2D &lbp, float w)
+{
+    vector<int> p1 = grid[i1][j1], p2 = grid[i2][j2];
+    float diff = norm(p1, p2) + w*abs(lbp[i1][j1] - lbp[i2][j2]);
+    if (diff < thres)
+        return true;
+    return false;
+}
+
 // Function to print the bar
 void bar(int part, int total)
 {
@@ -185,8 +195,77 @@ vector<vector<int>> label(MAT3D &grid, int thres)
     return lbl;
 }
 
+// Function to assign label to each region in the image
+vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float w)
+{
+    int r = grid.size();
+    int c = grid[0].size();
+    vector<vector<int>> lbl(r, vector<int>(c, 0));
+    map<int, int> eqtable;
+    int newcomp = 1;
+    int total = 0;
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++)
+        {
+            if ((i > 0 && matchLbp(i, j, i - 1, j, grid, thres, lbp, w)) && (j > 0 && matchLbp(i, j, i, j - 1, grid, thres, lbp, w)))
+            {
+                lbl[i][j] = lbl[i][j - 1];
+                if (lbl[i][j - 1] != lbl[i - 1][j])
+                {
+                    add(eqtable, lbl[i - 1][j], lbl[i][j - 1]);
+                }
+            }
+            else if ((i > 0 && match(i, j, i - 1, j, grid, thres)))
+            {
+                lbl[i][j] = lbl[i - 1][j];
+            }
+            else if ((j > 0 && match(i, j, i, j - 1, grid, thres)))
+            {
+                lbl[i][j] = lbl[i][j - 1];
+            }
+            else
+            {
+                lbl[i][j] = newcomp++;
+            }
+
+            // Bar disabled due to performance issues
+            // total += 1;
+            // if (total % 10000 == 0){
+
+            //     bar(total , (r*c));
+            // }
+        }
+    }
+
+    cout << endl;
+    for (auto x : eqtable)
+    {
+        int tmp = x.second;
+        while (eqtable.find(tmp) != eqtable.end())
+        {
+            tmp = eqtable[tmp];
+        }
+        eqtable[x.first] = tmp;
+    }
+
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++)
+        {
+            if (eqtable.find(lbl[i][j]) != eqtable.end())
+            {
+                lbl[i][j] = eqtable[lbl[i][j]];
+            }
+        }
+    }
+    removeNoise(lbl);
+
+    return lbl;
+}
+
 // Function to be exported. Takes image array as input and returns image with coloured regions
-void segment(ARR_TYPE *n, int x, int y, int z, int thres, ARR_TYPE *ret)
+void segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -201,7 +280,17 @@ void segment(ARR_TYPE *n, int x, int y, int z, int thres, ARR_TYPE *ret)
         }
     }
 
-    vector<vector<int>> lbl = label(img, thres);
+    MAT2D lbp(x, vector<int>(y, 0));
+
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++)
+        {
+            lbp[i][j] = (int)*(n + (y * i + j));
+        }
+    }
+
+    vector<vector<int>> lbl = labelv2(img, thres, lbp, w);
 
     int r = x, c = y;
 
@@ -235,7 +324,7 @@ void segment(ARR_TYPE *n, int x, int y, int z, int thres, ARR_TYPE *ret)
     }
 }
 
-int getRegions(unsigned char *n, unsigned char *l, int x, int y, int z, int thres, int *ret, int *count)
+int getRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, int *ret, int *count)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -250,7 +339,17 @@ int getRegions(unsigned char *n, unsigned char *l, int x, int y, int z, int thre
         }
     }
 
-    vector<vector<int>> lbl = label(img, thres);
+    MAT2D lbp(x, vector<int>(y, 0));
+
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++)
+        {
+            lbp[i][j] = (int)*(n + (y * i + j));
+        }
+    }
+
+    vector<vector<int>> lbl = labelv2(img, thres, lbp, w);
 
     int r = x, c = y;
 
@@ -310,7 +409,7 @@ void removeMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret)
     }
 }
 
-void segmentAndRemove(ARR_TYPE *n, int x, int y, int z, int thres1, int thres2, ARR_TYPE *ret)
+void segmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float w, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -324,8 +423,17 @@ void segmentAndRemove(ARR_TYPE *n, int x, int y, int z, int thres1, int thres2, 
             }
         }
     }
+    MAT2D lbp(x, vector<int>(y, 0));
 
-    vector<vector<int>> lbl = label(img, thres1);
+    for (int i = 0; i < x; i++)
+    {
+        for (int j = 0; j < y; j++)
+        {
+            lbp[i][j] = (int)*(n + (y * i + j));
+        }
+    }
+
+    vector<vector<int>> lbl = labelv2(img, thres1, lbp, w);
 
     int r = x, c = y;
 

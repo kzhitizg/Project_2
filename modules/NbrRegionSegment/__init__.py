@@ -2,10 +2,10 @@ from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrap
 import time
 
 
-def SegmentImage(img, thres, show_time=False):
+def SegmentImage(img, lbp, thres, w, show_time=False):
     t = time.time()
 
-    res = _SegmentWrapper(img, thres)
+    res = _SegmentWrapper(img, lbp, thres, w)
 
     if show_time:
         total = time.time()-t
@@ -15,10 +15,10 @@ def SegmentImage(img, thres, show_time=False):
     return res
 
 
-def RegionExtract(img, lbp, thres, show_time=False):
+def RegionExtract(img, lbp, thres, w, show_time=False):
     t = time.time()
 
-    res, reg = _RegionExtractWrapper(img, lbp, thres)
+    res, reg = _RegionExtractWrapper(img, lbp, thres, w)
 
     if show_time:
         total = time.time()-t
@@ -28,10 +28,10 @@ def RegionExtract(img, lbp, thres, show_time=False):
     return res, reg
 
 
-def RemoveBG(img, thres1, thres2, show_time=False):
+def RemoveBG(img, lbp, thres1, thres2, w, show_time=False):
     t = time.time()
 
-    ret = _RemoveBG(img, thres1, thres2)
+    ret = _RemoveBG(img, lbp, thres1, thres2, w)
 
     if show_time:
         total = time.time()-t
