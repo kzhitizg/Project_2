@@ -16,6 +16,16 @@ cdef extern from "../cpp/NbrRegionSegment.h":
     cdef void RemoveMap(int * n, int x, int y, int thres, int *count, int regs, bool *ret)
     cdef void SegmentAndRemove(unsigned char * n, unsigned char *l, int x, int y, int z, int thres1, int thres2, float w, unsigned char *ret)
 
+cdef extern from "../cpp/Fitness.h":
+    cdef float IntraSegVariance(unsigned char *img, int *labelled, int x, int y, int z, int numReg)
+
+def _GetIntraSegVariance(np.ndarray[unsigned char, ndim = 3] X, np.ndarray[int, ndim = 2] lab, nr):
+    X = np.ascontiguousarray(X)
+    lab = np.ascontiguousarray(lab)
+
+    return IntraSegVariance(&X[0, 0, 0], &lab[0, 0], X.shape[0], X.shape[1], X.shape[2], nr)
+
+
 def _GetBGWrapper(np.ndarray[int, ndim=2] X, thres, np.ndarray[int, ndim=1] reg):
     X = np.ascontiguousarray(X)
     reg = np.ascontiguousarray(reg)

@@ -11,6 +11,8 @@
 
 using namespace std;
 
+float greyscale(vector<int> &pt);
+
 void add(map<int, int> &eqtable, int v1, int v2);
 
 float norm(vector<int> &p1, vector<int> &p2);

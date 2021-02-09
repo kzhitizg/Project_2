@@ -2,6 +2,14 @@
 
 using namespace std;
 
+// To get greyscale value
+float greyscale(vector<int> &pt){
+    if (pt.size() != 3){
+        throw length_error("Point is not RGB");
+    }
+    return pt[0]+pt[1]+pt[2];
+}
+
 // To add a region mapping to the table
 void add(map<int, int> &eqtable, int v1, int v2)
 {

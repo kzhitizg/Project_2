@@ -1,6 +1,17 @@
-from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrapper, _RemoveBG
+from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrapper, _RemoveBG, _GetIntraSegVariance
 import time
 
+def GetIntraSegVariance(img, lab, nr, show_time = False):
+    t = time.time()
+
+    res = _GetIntraSegVariance(img, lab, nr)
+
+    if show_time:
+        total = time.time()-t
+
+        print("Time to Calculate = ", total)
+
+    return res
 
 def SegmentImage(img, lbp, thres, wr, wg, wc, show_time=False):
     t = time.time()

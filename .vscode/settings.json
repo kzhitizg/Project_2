@@ -5,5 +5,9 @@
         "C:\\TDM-GCC-64\\lib\\gcc\\x86_64-w64-mingw32\\5.1.0\\include\\",
         "C:\\TDM-GCC-64\\lib\\gcc\\x86_64-w64-mingw32\\5.1.0\\include\\c++\\x86_64-w64-mingw32\\"
     ],
-    "jupyter.jupyterServerType": "local"
+    "jupyter.jupyterServerType": "local",
+    "files.associations": {
+        "*.html": "html",
+        "vector": "cpp"
+    }
 }

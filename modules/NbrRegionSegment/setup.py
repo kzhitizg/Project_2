@@ -9,7 +9,8 @@ setup(
            "NbrRegionSegment",                    # the extension name
            sources=["./src/cython/NbrRegionSegment.pyx",
                   "./src/cpp/NbrRegionSegment.cpp",
-                  "./src/cpp/utils.cpp"],
+                  "./src/cpp/utils.cpp",
+                  "./src/cpp/Fitness.cpp"],
            language="c++",                          # generate and compile C++ code
       ), build_dir="build"),
     zip_safe=False,
