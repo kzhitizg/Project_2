@@ -51,11 +51,15 @@ float score(vector<int> p1, vector<int> p2, float wr, float wg)
     return res;
 }
 
+float score_t_c(int i1, int j1, int i2, int j2, MAT3D &grid, MAT2D &lbp, float wr, float wg, float wc){
+    vector<int> p1 = grid[i1][j1], p2 = grid[i2][j2];
+    return wc * score(p1, p2, wr, wg) + (1 - wc) * abs(lbp[i1][j1] - lbp[i2][j2]);
+}
+
 // Fucntion to check the merging criteria
 bool matchLbp(int i1, int j1, int i2, int j2, MAT3D &grid, int thres, MAT2D &lbp, float wr, float wg, float wc)
 {
-    vector<int> p1 = grid[i1][j1], p2 = grid[i2][j2];
-    float diff = wc * score(p1, p2, wr, wg) + (1 - wc) * abs(lbp[i1][j1] - lbp[i2][j2]);
+    float diff = score_t_c(i1, j1, i2, j2, grid, lbp, wr, wg, wc);
     if (diff < thres)
         return true;
     return false;

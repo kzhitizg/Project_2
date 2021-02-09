@@ -1,4 +1,13 @@
-#include "NbrRegionSegment.h"
+#include <iostream>
+#include <map>
+#include <unordered_map>
+#include <vector>
+#include <math.h>
+#include <set>
+#include <algorithm>
+
+#define MAT2D vector<vector<int>>
+#define MAT3D vector<vector<vector<int>>>
 
 using namespace std;
 
@@ -8,7 +17,7 @@ float norm(vector<int> &p1, vector<int> &p2);
 
 bool match(int i1, int j1, int i2, int j2, MAT3D &grid, int thres);
 
-float score(vector<int> p1, vector<int> p2, float wr, float wg);
+float score_t_c(int i1, int j1, int i2, int j2, MAT3D &grid, MAT2D &lbp, float wr, float wg, float wc);
 
 bool matchLbp(int i1, int j1, int i2, int j2, MAT3D &grid, int thres, MAT2D &lbp, float wr, float wg, float wc);
 
