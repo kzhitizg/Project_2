@@ -4,8 +4,8 @@
 
 using namespace std;
 
-float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int z, int numReg){
-    MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
+float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
+    MAT2D img(x, vector<int>(y,0));
 
     // To compensate the labels being 1 based indexed
     // numReg++;
@@ -14,10 +14,7 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int z, int numR
     {
         for (int j = 0; j < y; j++)
         {
-            for (int k = 0; k < z; k++)
-            {
-                img[i][j][k] = (int)*(n + z * (y * i + j) + k);
-            }
+            img[i][j] = (int)*(n + (y * i + j));
         }
     }
 
@@ -28,7 +25,7 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int z, int numR
     {
         for (int j = 0; j < y; j++)
         {
-            sum[*(labelled + y*i + j)] += greyscale(img[i][j]);
+            sum[*(labelled + y*i + j)] += img[i][j];
             count[*(labelled + y*i + j)] += 1;
         }
         
@@ -47,7 +44,7 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int z, int numR
     {
         for (int j = 0; j < y; j++)
         {
-            x_minus_x_bar[*(labelled + y*i + j)] += pow(greyscale(img[i][j]) - mean[*(labelled + y*i + j)], 2);
+            x_minus_x_bar[*(labelled + y*i + j)] += pow(img[i][j] - mean[*(labelled + y*i + j)], 2);
         }
     }
 
