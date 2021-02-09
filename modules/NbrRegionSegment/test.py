@@ -7,7 +7,7 @@ img = cv.imread(r"D:\Project 2\Project_2\Region_Growing\1.jpg")
 
 # res, reg= _RegionExtractWrapper(img, 10)
 # res= _SegmentWrapper(img, 10)
-res= _RemoveBG(img, 10, 1000)
+# res= _RemoveBG(img, 10, 1000)
 
 # res2 = _RemoveRegionsWrapper(res, 1000, reg)
 

@@ -7,7 +7,9 @@ setup(
     name='Hello world app',
     ext_modules=cythonize(Extension(
            "NbrRegionSegment",                    # the extension name
-           sources=["./src/cython/NbrRegionSegment.pyx", "./src/cpp/NbrRegionSegment.cpp"],      # the Cython source and
+           sources=["./src/cython/NbrRegionSegment.pyx",
+                  "./src/cpp/NbrRegionSegment.cpp",
+                  "./src/cpp/utils.cpp"],
            language="c++",                          # generate and compile C++ code
       ), build_dir="build"),
     zip_safe=False,
