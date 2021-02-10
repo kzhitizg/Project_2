@@ -8,6 +8,7 @@
     "jupyter.jupyterServerType": "local",
     "files.associations": {
         "*.html": "html",
-        "vector": "cpp"
+        "vector": "cpp",
+        "xtree": "cpp"
     }
 }

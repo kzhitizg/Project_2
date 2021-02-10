@@ -18,12 +18,16 @@ cdef extern from "../cpp/NbrRegionSegment.h":
 
 cdef extern from "../cpp/Fitness.h":
     cdef float IntraSegVariance(unsigned char *img, int *labelled, int x, int y, int numReg)
+    cdef float MoranI(unsigned char *img, int *labelled, int x, int y, int numReg)
 
-def _GetIntraSegVariance(np.ndarray[unsigned char, ndim = 2] X, np.ndarray[int, ndim = 2] lab, nr):
+def _GetAllVariance(np.ndarray[unsigned char, ndim = 2] X, np.ndarray[int, ndim = 2] lab, nr):
     X = np.ascontiguousarray(X)
     lab = np.ascontiguousarray(lab)
 
-    return IntraSegVariance(&X[0, 0], &lab[0, 0], X.shape[0], X.shape[1], nr)
+    a = IntraSegVariance(&X[0, 0], &lab[0, 0], X.shape[0], X.shape[1], nr)
+    b = MoranI(&X[0, 0], &lab[0, 0], X.shape[0], X.shape[1], nr)
+
+    return a, b
 
 
 def _GetBGWrapper(np.ndarray[int, ndim=2] X, thres, np.ndarray[int, ndim=1] reg):

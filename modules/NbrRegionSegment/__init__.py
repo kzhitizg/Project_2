@@ -1,10 +1,10 @@
-from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrapper, _RemoveBG, _GetIntraSegVariance
+from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrapper, _RemoveBG, _GetAllVariance
 import time
 
-def GetIntraSegVariance(img, lab, nr, show_time = False):
+def GetAllSegVariance(img, lab, nr, show_time = False):
     t = time.time()
 
-    res = _GetIntraSegVariance(img, lab, nr)
+    res = _GetAllVariance(img, lab, nr)
 
     if show_time:
         total = time.time()-t

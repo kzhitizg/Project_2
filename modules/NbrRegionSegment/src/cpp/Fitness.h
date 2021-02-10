@@ -13,10 +13,16 @@
 
 float IntraSegVariance(ARR_TYPE *img, int *labelled, int x, int y, int numReg);
 /*
-    img = 3D image
+    img = 2D image
     labelled = 2D labelled image
     (x,y) = Shape of image
     numReg = Total number of regions
 */
 
-float MoranI(ARR_TYPE *img, int *labelled, int x, int y, int z, int numReg);
+float MoranI(ARR_TYPE *img, int *labelled, int x, int y, int numReg);
+/*
+    img = 2D image
+    labelled = 2D labelled image
+    (x,y) = Shape of image
+    numReg = Total number of regions
+*/
