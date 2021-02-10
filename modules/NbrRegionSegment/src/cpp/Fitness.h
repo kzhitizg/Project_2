@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <unordered_map>
 #include <vector>
@@ -6,6 +7,8 @@
 #include <set>
 #include <algorithm>
 #include <numeric>
+#include <bitset>
+#include <unordered_set>
 
 #define ARR_TYPE unsigned char
 #define MAT2D vector<vector<int>>

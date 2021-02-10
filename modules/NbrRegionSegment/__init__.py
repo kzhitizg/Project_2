@@ -2,6 +2,10 @@ from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrap
 import time
 
 def GetAllSegVariance(img, lab, nr, show_time = False):
+    # if nr > 128*128:
+    #     print("Too Big")
+    #     return
+
     t = time.time()
 
     res = _GetAllVariance(img, lab, nr)

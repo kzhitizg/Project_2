@@ -83,7 +83,9 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
         }
     }
 
-    unordered_map<int, set<int>> w;
+    int nbrcount = 0;
+
+    vector<set<int>> w(numReg, set<int>());
 
     int nbr[][2] = {
         -1, 0,
@@ -112,8 +114,9 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
                 {
                     r1 = min(lab.at(a).at(b), lab.at(i).at(j));
                     r2 = max(lab.at(a).at(b), lab.at(i).at(j));
-
-                    if (r1 != r2){
+                    
+                    if (w[r1].find(r2) == w[r1].end()){
+                        nbrcount += 1;
                         w[r1].insert(r2);
                     }
                 }
@@ -127,7 +130,7 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
 
     img_mean /= x*y;
 
-    // cout << "(cpp) Image mean = " << img_mean << endl;
+    cout << "(cpp) Image mean = " << img_mean << ' ' << nbrcount << endl;
 
     vector<float> mean(numReg, 0);
 
@@ -137,19 +140,27 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
     }
 
     float numerator = 0;
-    set<int> tmp;
+    set<int> *tmp;
 
     for (int i = 0; i < numReg; i++)
     {
+        numerator += (mean[i]-img_mean)*(mean[i]-img_mean);
         for (int j = i+1; j < numReg; j++)
         {
-            tmp = w[i];
-            if (tmp.find(j) != tmp.end()){
+            tmp = &w[i];
+
+            if ((*tmp).find(j) != (*tmp).end()){
                 numerator += (mean[i]-img_mean)*(mean[j]-img_mean);
+                // cout << numerator << endl;
             }
         }
-        // cout << i << endl;
+
+        if (i%1000 == 0){
+            bar(i, numReg);
+        }
     }
+
+    cout << endl;
 
     numerator *= numReg;
 
@@ -159,9 +170,11 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
     {
         denominator += pow(mean[i]-img_mean, 2);
     }
-    
-    denominator *= w.size();
 
+    
+    denominator *= nbrcount;
+
+    cout << numerator << ' ' << denominator << endl;
     /*
         variance of i-th region
         

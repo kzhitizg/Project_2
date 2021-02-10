@@ -9,6 +9,12 @@
     "files.associations": {
         "*.html": "html",
         "vector": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "set": "cpp",
+        "execution": "cpp",
+        "xhash": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "unordered_set": "cpp"
     }
 }
