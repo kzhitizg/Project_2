@@ -4,8 +4,9 @@
 
 using namespace std;
 
-float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
-    MAT2D img(x, vector<int>(y,0));
+float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
+{
+    MAT2D img(x, vector<int>(y, 0));
 
     for (int i = 0; i < x; i++)
     {
@@ -22,26 +23,25 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
     {
         for (int j = 0; j < y; j++)
         {
-            sum[*(labelled + y*i + j)] += img[i][j];
-            count[*(labelled + y*i + j)] += 1;
+            sum[*(labelled + y * i + j)] += img[i][j];
+            count[*(labelled + y * i + j)] += 1;
         }
-        
     }
-    
+
     vector<float> mean(numReg, 0);
 
     for (int i = 0; i < numReg; i++)
     {
-        mean[i] = sum[i]/count[i];
+        mean[i] = sum[i] / count[i];
     }
-    
+
     vector<float> x_minus_x_bar(numReg, 0);
 
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
         {
-            x_minus_x_bar[*(labelled + y*i + j)] += pow(img[i][j] - mean[*(labelled + y*i + j)], 2);
+            x_minus_x_bar[*(labelled + y * i + j)] += pow(img[i][j] - mean[*(labelled + y * i + j)], 2);
         }
     }
 
@@ -54,18 +54,18 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
         So can be written as
         netvariance += x_minus_x_bar[i]
     */
-    
-    float net_variance = accumulate(x_minus_x_bar.begin(), x_minus_x_bar.end(), 0.0) / 
-                                    accumulate(count.begin(), count.end(), 0.0);
-                                    // 0.0 because result shoud be float
-    
+
+    float net_variance = accumulate(x_minus_x_bar.begin(), x_minus_x_bar.end(), 0.0) /
+                         accumulate(count.begin(), count.end(), 0.0);
+    // 0.0 because result shoud be float
+
     return net_variance;
-    
 }
 
-float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
-    MAT2D img(x, vector<int>(y,0));
-    MAT2D lab(x, vector<int>(y,0));
+float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
+{
+    MAT2D img(x, vector<int>(y, 0));
+    MAT2D lab(x, vector<int>(y, 0));
 
     for (int i = 0; i < x; i++)
     {
@@ -87,11 +87,11 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
 
     vector<set<int>> w(numReg, set<int>());
 
-    int nbr[][2] = {
-        -1, 0,
-        0, -1,
-    };
+    int dx[] = {0, -1, 0, 1};
+    int dy[] = {-1, 0, 1, 0};
 
+    //Calculation of the weights, wij
+    //Calculation of mean of each region
     vector<float> sum(numReg, 0);
     vector<int> count(numReg, 0);
     float img_mean = 0;
@@ -106,29 +106,29 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
             count[lab[i][j]] += 1;
             img_mean += img[i][j];
 
-            for (int p = 0; p < 2; p++)
+            for (int p = 0; p < 4; p++)
             {
-                a = i+nbr[p][0];
-                b = j+nbr[p][1];
+                a = i + dx[p];
+                b = j + dx[p];
                 try
                 {
                     r1 = min(lab.at(a).at(b), lab.at(i).at(j));
                     r2 = max(lab.at(a).at(b), lab.at(i).at(j));
-                    
-                    if (w[r1].find(r2) == w[r1].end()){
+
+                    if (w[r1].find(r2) == w[r1].end() && r1 != r2)
+                    {
                         nbrcount += 1;
                         w[r1].insert(r2);
                     }
                 }
-                catch(const std::out_of_range& e){
-
+                catch (const std::out_of_range &e)
+                {
                 }
             }
-            
         }
     }
 
-    img_mean /= x*y;
+    img_mean /= x * y;
 
     cout << "(cpp) Image mean = " << img_mean << ' ' << nbrcount << endl;
 
@@ -136,7 +136,7 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
 
     for (int i = 0; i < numReg; i++)
     {
-        mean[i] = sum[i]/count[i];
+        mean[i] = sum[i] / count[i];
     }
 
     float numerator = 0;
@@ -144,18 +144,20 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
 
     for (int i = 0; i < numReg; i++)
     {
-        numerator += (mean[i]-img_mean)*(mean[i]-img_mean);
-        for (int j = i+1; j < numReg; j++)
+        numerator += (mean[i] - img_mean) * (mean[i] - img_mean);
+        for (int j = 0; j < numReg; j++)
         {
             tmp = &w[i];
 
-            if ((*tmp).find(j) != (*tmp).end()){
-                numerator += (mean[i]-img_mean)*(mean[j]-img_mean);
+            if ((*tmp).find(j) != (*tmp).end())
+            {
+                numerator += (mean[i] - img_mean) * (mean[j] - img_mean);
                 // cout << numerator << endl;
             }
         }
 
-        if (i%1000 == 0){
+        if (i % 1000 == 0)
+        {
             bar(i, numReg);
         }
     }
@@ -168,10 +170,9 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
 
     for (int i = 0; i < numReg; i++)
     {
-        denominator += pow(mean[i]-img_mean, 2);
+        denominator += pow(mean[i] - img_mean, 2);
     }
 
-    
     denominator *= nbrcount;
 
     cout << numerator << ' ' << denominator << endl;
@@ -184,6 +185,6 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg){
         So can be written as
         netvariance += x_minus_x_bar[i]
     */
-    
+
     return numerator / denominator;
 }

@@ -16,5 +16,9 @@
         "xstring": "cpp",
         "xutility": "cpp",
         "unordered_set": "cpp"
-    }
+    },
+    "python.autoComplete.extraPaths": [
+    ],
+    "python.languageServer": "Pylance",
+    "python.analysis.extraPaths": []
 }

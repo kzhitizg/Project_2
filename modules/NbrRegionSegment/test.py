@@ -4,11 +4,11 @@ import cv2 as cv
 import numpy as np
 from skimage.feature import local_binary_pattern
 
-img = cv.imread(r"D:\Project 2\Project_2\Region_Growing\1.jpg")
+img = cv.imread("E:\8thSem\BTP_Research\Project_2\Region_Growing\1.jpg")
 gray_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
 radius = 1
-points = 8*radius 
+points = 8*radius
 
 lbp = local_binary_pattern(gray_img, points, radius, "uniform").astype("uint8")
 r1, r2 = _RegionExtractWrapper(img, lbp, 20, 0.2)
