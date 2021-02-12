@@ -12,9 +12,9 @@ from libcpp cimport bool
 # Import functions from header file
 cdef extern from "../cpp/NbrRegionSegment.h":
     cdef void Segment(unsigned char *n, unsigned char *l, int x, int y, int z, int thres, float wr, float wg, float wc, unsigned char *Y)
-    cdef int GetRegions(unsigned char *n, unsigned char *l, int x, int y, int z, int thres, float w, int *ret, int *count)
+    cdef int GetRegions(unsigned char *n, unsigned char *l, int x, int y, int z, int thres, float wr, float wg, float wc, int *ret, int *count)
     cdef void RemoveMap(int * n, int x, int y, int thres, int *count, int regs, bool *ret)
-    cdef void SegmentAndRemove(unsigned char * n, unsigned char *l, int x, int y, int z, int thres1, int thres2, float w, unsigned char *ret)
+    cdef void SegmentAndRemove(unsigned char * n, unsigned char *l, int x, int y, int z, int thres1, int thres2, float wr, float wg, float wc, unsigned char *ret)
 
 cdef extern from "../cpp/Fitness.h":
     cdef float IntraSegVariance(unsigned char *img, int *labelled, int x, int y, int numReg)
@@ -57,7 +57,7 @@ def _SegmentWrapper(np.ndarray[unsigned char, ndim=3] X, np.ndarray[unsigned cha
     # Return array
     return Y
 
-def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, np.ndarray[unsigned char, ndim=2] lbp, thres, w):
+def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, np.ndarray[unsigned char, ndim=2] lbp, thres, wr, wg, wc):
     # Make the array allocation continuous
     X = np.ascontiguousarray(X)
     lbp = np.ascontiguousarray(lbp)
@@ -67,12 +67,12 @@ def _RegionExtractWrapper(np.ndarray[unsigned char, ndim=3] X, np.ndarray[unsign
     cdef np.ndarray[int, ndim=1, mode="c"] regions = np.zeros((X.shape[0]*X.shape[1]), dtype= "int32")
     
     # Call the function
-    reg = GetRegions(&X[0,0, 0], &lbp[0, 0], X.shape[0], X.shape[1], X.shape[2], thres, w, &Y[0, 0], &regions[0])
+    reg = GetRegions(&X[0,0, 0], &lbp[0, 0], X.shape[0], X.shape[1], X.shape[2], thres, wr, wg, wc, &Y[0, 0], &regions[0])
 
     # Return array
     return Y, regions[:reg]
 
-def _RemoveBG(np.ndarray[unsigned char, ndim=3] X,  np.ndarray[unsigned char, ndim=2] lbp, thres1, thres2, w):
+def _RemoveBG(np.ndarray[unsigned char, ndim=3] X,  np.ndarray[unsigned char, ndim=2] lbp, thres1, thres2, wr, wg, wc):
     # Make the array allocation continuous
     X = np.ascontiguousarray(X)
     lbp = np.ascontiguousarray(lbp)
@@ -81,7 +81,7 @@ def _RemoveBG(np.ndarray[unsigned char, ndim=3] X,  np.ndarray[unsigned char, nd
     cdef np.ndarray[unsigned char, ndim=3, mode="c"] Y = np.zeros_like(X)
     
     # Call the function
-    SegmentAndRemove(&X[0,0, 0], &lbp[0, 0], X.shape[0], X.shape[1], X.shape[2], thres1, thres2, w, &Y[0, 0, 0])
+    SegmentAndRemove(&X[0,0, 0], &lbp[0, 0], X.shape[0], X.shape[1], X.shape[2], thres1, thres2, wr, wg, wc, &Y[0, 0, 0])
 
     # Return array
     return Y

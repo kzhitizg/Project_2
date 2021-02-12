@@ -202,7 +202,7 @@ void Segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr,
     }
 }
 
-int GetRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w, int *ret, int *count)
+int GetRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, int *ret, int *count)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -227,7 +227,7 @@ int GetRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w
         }
     }
 
-    vector<vector<int>> lbl = labelv2(img, thres, lbp, w);
+    vector<vector<int>> lbl = labelv2(img, thres, lbp, wr, wg, wc);
 
     int r = x, c = y;
 
@@ -287,7 +287,7 @@ void RemoveMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret)
     }
 }
 
-void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float w, ARR_TYPE *ret)
+void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float wr, float wg, float wc, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -311,7 +311,7 @@ void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1,
         }
     }
 
-    vector<vector<int>> lbl = labelv2(img, thres1, lbp, w);
+    vector<vector<int>> lbl = labelv2(img, thres1, lbp, wr, wg, wc);
 
     int r = x, c = y;
 

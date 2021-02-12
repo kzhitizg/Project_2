@@ -30,10 +30,10 @@ def SegmentImage(img, lbp, thres, wr, wg, wc, show_time=False):
     return res
 
 
-def RegionExtract(img, lbp, thres, w, show_time=False):
+def RegionExtract(img, lbp, thres, wr, wg, wc, show_time=False):
     t = time.time()
 
-    res, reg = _RegionExtractWrapper(img, lbp, thres, w)
+    res, reg = _RegionExtractWrapper(img, lbp, thres, wr, wg, wc)
 
     if show_time:
         total = time.time()-t
@@ -43,10 +43,10 @@ def RegionExtract(img, lbp, thres, w, show_time=False):
     return res, reg
 
 
-def RemoveBG(img, lbp, thres1, thres2, w, show_time=False):
+def RemoveBG(img, lbp, thres1, thres2, wr, wg, wc, show_time=False):
     t = time.time()
 
-    ret = _RemoveBG(img, lbp, thres1, thres2, w)
+    ret = _RemoveBG(img, lbp, thres1, thres2, wr, wg, wc)
 
     if show_time:
         total = time.time()-t
@@ -59,11 +59,11 @@ def RemoveBG(img, lbp, thres1, thres2, w, show_time=False):
 def GetBgMap(label_map, thres, reg_count, show_time=False):
     t = time.time()
 
-    ret, mp = _GetBGWrapper(label_map, thres, reg_count)
+    ret = _GetBGWrapper(label_map, thres, reg_count)
 
     if show_time:
         total = time.time()-t
 
         print("Time to Get map = ", total)
 
-    return ret, mp
+    return ret
