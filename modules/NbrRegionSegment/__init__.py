@@ -1,11 +1,20 @@
 from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrapper, _RemoveBG, _GetAllVariance
 import time
+import numpy as np
+
+def GetWeightedGrey(img, wr, wg, show_time = True):
+    t = time.time()
+
+    newim = (img[:, :, 0]*wr + img[:, :, 1]*wg + img[:, :, 2]*(1-wr-wg)).astype("uint8")
+
+    if show_time:
+        total = time.time()-t
+
+        print("Time to Calculate = ", total)
+
+    return newim
 
 def GetAllSegVariance(img, lab, nr, show_time = False):
-    # if nr > 128*128:
-    #     print("Too Big")
-    #     return
-
     t = time.time()
 
     res = _GetAllVariance(img, lab, nr)

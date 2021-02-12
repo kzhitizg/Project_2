@@ -25,7 +25,7 @@ resb = []
 sm = []
 
 for i in range(1, 31, 5):
-    r1, r2 = RegionExtract(img, lbp, i, 0.4, 0.4, 0.8, True)
+    r1, r2 = RegionExtract(img, lbp, i, 0.4, 0.3, 0.9, True)
 
     a, b = GetAllSegVariance(gray_img, r1, r2.shape[0], True)
     print(a, b)
