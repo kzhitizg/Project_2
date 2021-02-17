@@ -130,3 +130,6 @@ dmypy.json
 
 # IDE files
 .vscode/
+
+#ignore the dataset folder
+Dataset/
