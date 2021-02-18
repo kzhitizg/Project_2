@@ -39,6 +39,13 @@ class MPA:
 
         self.Xmin = np.ones((self.search_agents_no, self.dim)) * self.lb
         self.Xmax = np.ones((self.search_agents_no, self.dim)) * self.ub
+        
+        self.iter = 0
+        self.FADs = 0.2
+        self.P = 0.5
+
+        # It will act as a memory for previously used parameters
+        self.memory = {}
 
     def __init_positions(self):
         # initialize positions of preys
@@ -47,20 +54,19 @@ class MPA:
             self.Prey[:, i] = np.random.rand(self.search_agents_no)*(self.ub[i]-self.lb[i]) + self.lb[i]
 
     def get_fitness(self, vals):
-        return self.func(*tuple(np.split(vals, self.dim, 0)))
+        vals = tuple(map(float, np.split(vals, self.dim, 0)))
+        if vals in self.memory.keys():
+            return self.memory[vals]
+        else:
+            fit = self.func(*vals)
+            self.memory[vals] = fit
+            return fit
     
     def run(self):
-        # It will act as a memory for previously used parameters
-        self.memory = {}
-
         #Initialize
         self.initialize()
 
-        iter = 0
-        FADs = 0.2
-        P = 0.5
-
-        while iter < self.maxItr:
+        while self.iter < self.maxItr:
 
             #------------------ Detecting Top Predator ----------------------
             for i in range(self.Prey.shape[0]):
@@ -75,7 +81,7 @@ class MPA:
                     self.Top_predator_pos = self.Prey[i,:]
 
             # -------------------Marine Memory Saving ------------------------
-            if iter == 0:
+            if self.iter == 0:
                 fit_old = self.fitness
                 Prey_old = self.Prey
             
@@ -94,7 +100,7 @@ class MPA:
             #-----------------------------------------------------------------
 
             Elite = np.tile(self.Top_predator_pos,(self.search_agents_no,1)) 
-            CF = (1 - iter/self.maxItr)** (2*iter/self.maxItr)
+            CF = (1 - self.iter/self.maxItr)** (2*self.iter/self.maxItr)
 
             RL = 0.05 * self.levy(self.search_agents_no, self.dim, 1.5)   #Levy random number vector
             RB = np.random.randn(self.search_agents_no, self.dim)          #Brownian random number vector
@@ -103,24 +109,24 @@ class MPA:
                 for j in range(self.Prey.shape[1]):        
                     R = np.random.rand()
                     #------------------ Phase 1 (Eq.12) ------------------- 
-                    if iter<self.maxItr/3:
+                    if self.iter<self.maxItr/3:
                         self.step_size[i,j] = RB[i,j] * (Elite[i,j]-RB[i,j]*self.Prey[i,j])                
-                        self.Prey[i,j] = self.Prey[i,j] + P * R * self.step_size[i,j]
+                        self.Prey[i,j] = self.Prey[i,j] + self.P * R * self.step_size[i,j]
                             
                     #--------------- Phase 2 (Eqs. 13 & 14)----------------
-                    elif iter>self.maxItr/3 and iter < 2*self.maxItr/3:
+                    elif self.iter>self.maxItr/3 and self.iter < 2*self.maxItr/3:
                         
                         if i > self.Prey.shape[0] / 2:
                             self.step_size[i,j] = RB[i,j] * (RB[i,j] * Elite[i,j] - self.Prey[i,j])
-                            self.Prey[i,j] = Elite[i,j] + P*CF*self.step_size[i,j] 
+                            self.Prey[i,j] = Elite[i,j] + self.P*CF*self.step_size[i,j] 
                         else:
                             self.step_size[i,j] = RL[i,j] * (Elite[i,j] - RL[i,j] * self.Prey[i,j])                     
-                            self.Prey[i,j] = self.Prey[i,j] + P * R * self.step_size[i,j]
+                            self.Prey[i,j] = self.Prey[i,j] + self.P * R * self.step_size[i,j]
                     
                     #----------------- Phase 3 (Eq. 15)-------------------
                     else:
                         self.step_size[i,j] = RL[i,j] * (RL[i,j] * Elite[i,j] - self.Prey[i,j]) 
-                        self.Prey[i,j] = Elite[i,j] + P*CF*self.step_size[i,j]
+                        self.Prey[i,j] = Elite[i,j] + self.P*CF*self.step_size[i,j]
 
             
             #------------------ Detecting top predator ------------------        
@@ -136,7 +142,7 @@ class MPA:
                     self.Top_predator_pos = self.Prey[i,:]
 
             # -------------------Marine Memory Saving ------------------------
-            if iter == 0:
+            if self.iter == 0:
                 fit_old = self.fitness
                 Prey_old = self.Prey
             
@@ -152,17 +158,17 @@ class MPA:
 
             #---------- Eddy formation and FADs effect (Eq 16) ----------- 
                                         
-            if np.random.rand() < FADs:
-                U = np.random.rand(self.search_agents_no,self.dim) < FADs                                                                                              
+            if np.random.rand() < self.FADs:
+                U = np.random.rand(self.search_agents_no,self.dim) < self.FADs                                                                                              
                 self.Prey = self.Prey + CF*((self.Xmin+np.random.rand(self.search_agents_no, self.dim) *(self.Xmax - self.Xmin)) *U)
 
             else:
                 r = np.random.rand()  
                 Rs = self.Prey.shape[0]
-                self.step_size = (FADs * (1-r)+r) * (self.Prey [np.random.permutation(Rs), : ]- self.Prey[np.random.permutation(Rs),:])
+                self.step_size = (self.FADs * (1-r)+r) * (self.Prey [np.random.permutation(Rs), : ]- self.Prey[np.random.permutation(Rs),:])
                 self.Prey = self.Prey + self.step_size
 
-            iter=iter+1 
+            self.iter += 1 
             self.convergence_curve.append(self.Top_predator_fit)
 
     def levy(self, n, m, beta):
@@ -179,3 +185,119 @@ class MPA:
         z = u / (abs(v)**(1/beta))
 
         return z
+
+    def run_once(self):
+        if self.iter < self.maxItr:
+
+            #------------------ Detecting Top Predator ----------------------
+            for i in range(self.Prey.shape[0]):
+                Flag4ub = self.Prey[i, :] > self.ub
+                Flag4lb = self.Prey[i, :] < self.lb
+                self.Prey[i,:] = (self.Prey[i, :] * (~(Flag4ub + Flag4lb))) + self.ub * Flag4ub + self.lb * Flag4lb;                    
+        
+                self.fitness[i] = self.get_fitness(self.Prey[i, :])
+                                
+                if self.fitness[i] < self.Top_predator_fit:
+                    self.Top_predator_fit = self.fitness[i]
+                    self.Top_predator_pos = self.Prey[i,:]
+
+            # -------------------Marine Memory Saving ------------------------
+            if self.iter == 0:
+                fit_old = self.fitness
+                Prey_old = self.Prey
+            
+            Inx = (fit_old < self.fitness)
+            Indx = np.tile(Inx, (1, self.dim))
+
+            # Set fitness of previous iteration, if it was better
+            print(self.fitness)
+            self.Prey = Indx*Prey_old + (~Indx)*self.Prey
+            self.fitness = Inx*fit_old + (~Inx)*self.fitness
+
+            print(self.fitness)
+            fit_old = self.fitness
+            Prey_old = self.Prey
+
+            #-----------------------------------------------------------------
+
+            Elite = np.tile(self.Top_predator_pos,(self.search_agents_no,1)) 
+            CF = (1 - self.iter/self.maxItr)** (2*self.iter/self.maxItr)
+
+            RL = 0.05 * self.levy(self.search_agents_no, self.dim, 1.5)   #Levy random number vector
+            RB = np.random.randn(self.search_agents_no, self.dim)          #Brownian random number vector
+                    
+            for i in range (self.Prey.shape[0]):
+                for j in range(self.Prey.shape[1]):        
+                    R = np.random.rand()
+                    #------------------ Phase 1 (Eq.12) ------------------- 
+                    if self.iter<self.maxItr/3:
+                        self.step_size[i,j] = RB[i,j] * (Elite[i,j]-RB[i,j]*self.Prey[i,j])                
+                        self.Prey[i,j] = self.Prey[i,j] + self.P * R * self.step_size[i,j]
+                            
+                    #--------------- Phase 2 (Eqs. 13 & 14)----------------
+                    elif self.iter>self.maxItr/3 and self.iter < 2*self.maxItr/3:
+                        
+                        if i > self.Prey.shape[0] / 2:
+                            self.step_size[i,j] = RB[i,j] * (RB[i,j] * Elite[i,j] - self.Prey[i,j])
+                            self.Prey[i,j] = Elite[i,j] + self.P*CF*self.step_size[i,j] 
+                        else:
+                            self.step_size[i,j] = RL[i,j] * (Elite[i,j] - RL[i,j] * self.Prey[i,j])                     
+                            self.Prey[i,j] = self.Prey[i,j] + self.P * R * self.step_size[i,j]
+                    
+                    #----------------- Phase 3 (Eq. 15)-------------------
+                    else:
+                        self.step_size[i,j] = RL[i,j] * (RL[i,j] * Elite[i,j] - self.Prey[i,j]) 
+                        self.Prey[i,j] = Elite[i,j] + self.P*CF*self.step_size[i,j]
+
+            
+            #------------------ Detecting top predator ------------------        
+            for i in range(self.Prey.shape[0]):
+                Flag4ub = self.Prey[i,:] > self.ub
+                Flag4lb = self.Prey[i,:] < self.lb
+                self.Prey[i,:] = (self.Prey[i,:]*(~(Flag4ub+Flag4lb))) + self.ub*Flag4ub + self.lb*Flag4lb
+            
+                self.fitness[i] = self.get_fitness(self.Prey[i,:])
+                    
+                if self.fitness[i] < self.Top_predator_fit:
+                    self.Top_predator_fit = self.fitness[i]
+                    self.Top_predator_pos = self.Prey[i,:]
+
+            # -------------------Marine Memory Saving ------------------------
+            if self.iter == 0:
+                fit_old = self.fitness
+                Prey_old = self.Prey
+            
+            Inx = (fit_old < self.fitness)
+            Indx = np.tile(Inx, (1, self.dim))
+
+            # Set fitness of previous iteration, if it was better
+            self.Prey = Indx*Prey_old + (~Indx)*self.Prey
+            self.fitness = Inx*fit_old + (~Inx)*self.fitness
+
+            fit_old = self.fitness
+            Prey_old = self.Prey
+
+            #---------- Eddy formation and FADs effect (Eq 16) ----------- 
+                                        
+            if np.random.rand() < self.FADs:
+                U = np.random.rand(self.search_agents_no,self.dim) < self.FADs                                                                                              
+                self.Prey = self.Prey + CF*((self.Xmin+np.random.rand(self.search_agents_no, self.dim) *(self.Xmax - self.Xmin)) *U)
+
+            else:
+                r = np.random.rand()  
+                Rs = self.Prey.shape[0]
+                self.step_size = (self.FADs * (1-r)+r) * (self.Prey [np.random.permutation(Rs), : ]- self.Prey[np.random.permutation(Rs),:])
+                self.Prey = self.Prey + self.step_size
+
+            self.iter += 1 
+            self.convergence_curve.append(self.Top_predator_fit)
+            return True
+        
+        else:
+            print("Maximum iterations done")
+            return False
+
+    def iter_gen(self):
+        self.initialize()
+        for i in range(self.maxItr):
+            yield self.run_once()
