@@ -210,11 +210,9 @@ class MPA:
             Indx = np.tile(Inx, (1, self.dim))
 
             # Set fitness of previous iteration, if it was better
-            print(self.fitness)
             self.Prey = Indx*Prey_old + (~Indx)*self.Prey
             self.fitness = Inx*fit_old + (~Inx)*self.fitness
 
-            print(self.fitness)
             fit_old = self.fitness
             Prey_old = self.Prey
 
