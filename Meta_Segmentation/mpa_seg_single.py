@@ -11,9 +11,6 @@ import numpy as np
 from tqdm import tqdm
 from skimage.feature import local_binary_pattern
 import os
-import multiprocessing as mp
-
-import time
 
 sys.path.append(os.path.join(os.path.dirname(os.getcwd()),"modules"))
 
@@ -31,6 +28,8 @@ from MarinePredator.MPA import MPA
 def get_fit_oneimg(name, wr, wg, wc, thres, res):
     #read the image
     img = cv.imread("../Dataset/" + name + ".jpg")
+    print(name)
+    img = cv.resize(img, (0,0), fx = 0.5, fy = 0.5)
 
     gray_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
@@ -47,7 +46,7 @@ def get_fit_oneimg(name, wr, wg, wc, thres, res):
     #find the fitness level
     intra, inter = seg.GetAllSegVariance(gray_img, r1, r2.shape[0])
 
-    res.put(intra+inter)
+    res.append(intra+inter)
 
 
 # In[18]:
@@ -59,35 +58,21 @@ def fitness_func(wr, wg, wc, thres):
     data = pd.read_csv("../CSV/reduced.csv")
 
     #fitness for each image against each predator
-    # ctx = mp.set_start_method("forkserver")
-    fit = mp.Queue()
+    fit = list()
 
-    p = [mp.Process(target = get_fit_oneimg, args=(entry[2], wr, wg, wc, thres, fit)) for entry in data.values]
-
-    for proc in p:
-        proc.start()
-
-    for proc in p:
-        proc.join()
-
-    # #fetch the image file
-    # for entry in tqdm(data.values, desc = "Fitness Calculation"):
-    #     #push the fitness into the list
-    #     get_fit_oneimg(entry[2], wr, wg, wc, thres, fit) #-> fitness is the sum of the inter and intra variance and is a decreasing function
+    #fetch the image file
+    for entry in tqdm(data.values[2:], desc = "Fitness Calculation"):
+        #push the fitness into the list
+        get_fit_oneimg(entry[2], wr, wg, wc, thres, fit) #-> fitness is the sum of the inter and intra variance and is a decreasing function
     
     #return the fitness as the avg of all fitness
-    arr = [fit.get() for i in range(len(data.values))]
-    print(arr)
-    return np.mean(arr)
+    return np.mean(fit)
 
 #%%
-if __name__ == "__main__":
-    t = time.time()
-    fitness_func(0.60761819,  0.36488088,  0.22582778, 10.87146632)
-    print(time.time()-t)
+fitness_func(5.12561905e-01, 1.17403947e-02, 5.39755087e-01, 4.88225573e+01)
 
 
-# In[19]:
+# # In[19]:
 
 
 # #algo params for the MPA

@@ -6,42 +6,44 @@ using namespace std;
 
 float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
 {
-    MAT2D img(x, vector<int>(y, 0));
+    vector<vector<float>> img(x, vector<float>(y, 0));
 
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
         {
-            img[i][j] = (int)*(n + (y * i + j));
+            img[i][j] = *(n + (y * i + j))/256.0;
         }
     }
 
-    vector<float> sum(numReg, 0);
-    vector<double> count(numReg, 0);
+    vector<float> sum(numReg, 0.0);
+    vector<double> count(numReg, 0.0);
 
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
         {
             sum[*(labelled + y * i + j)] += img[i][j];
-            count[*(labelled + y * i + j)] += 1;
+            count[*(labelled + y * i + j)] += 1.0;
         }
     }
 
     vector<float> mean(numReg, 0);
+    vector<float> countsq(numReg, 0);
 
     for (int i = 0; i < numReg; i++)
     {
         mean[i] = sum[i] / count[i];
+        countsq[i] = count[i]*count[i];
     }
 
-    vector<float> x_minus_x_bar(numReg, 0);
+    vector<double> x_minus_x_bar(numReg, 0);
 
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
         {
-            x_minus_x_bar[*(labelled + y * i + j)] += count[i]*pow(img[i][j] - mean[*(labelled + y * i + j)], 2);
+            x_minus_x_bar[*(labelled + y * i + j)] += count[*(labelled + y * i + j)]*pow(img[i][j] - mean[*(labelled + y * i + j)], 2);
         }
     }
 
@@ -57,7 +59,10 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
 
     // 0.0 because result shoud be float
     double num = accumulate(x_minus_x_bar.begin(), x_minus_x_bar.end(), 0.0),
+        // denom = numReg*numReg;
         denom = (((double)x)*y*x*y);
+
+    // cout << num << ' ' << denom << endl;
 
     float net_variance = num/denom;
 
@@ -97,7 +102,7 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
     //Calculation of the weights, wij
     //Calculation of mean of each region
     vector<float> sum(numReg, 0);
-    vector<int> count(numReg, 0);
+    vector<double> count(numReg, 0);
     float img_mean = 0;
 
     int a, b, r1, r2;

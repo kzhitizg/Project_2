@@ -76,26 +76,24 @@ bool matchLbp(int i1, int j1, int i2, int j2, MAT3D &grid, int thres, MAT2D &lbp
 // Function to print the bar
 void bar(int part, int total)
 {
-    // int barWidth = 70;
-    // float progress = ((float)part) / total;
+    int barWidth = 70;
+    float progress = ((float)part) / total;
 
-    // std::cout << "[";
-    // int pos = barWidth * progress;
-    // for (int i = 0; i < barWidth; ++i)
-    // {
-    //     if (i < pos)
-    //         std::cout << "=";
-    //     else if (i == pos)
-    //         std::cout << ">";
-    //     else
-    //         std::cout << " ";
-    // }
-    // std::cout << "] " << part << " / " << total << "\r";
-    // std::cout.flush();
+    std::cout << "[";
+    int pos = barWidth * progress;
+    for (int i = 0; i < barWidth; ++i)
+    {
+        if (i < pos)
+            std::cout << "=";
+        else if (i == pos)
+            std::cout << ">";
+        else
+            std::cout << " ";
+    }
+    std::cout << "] " << part << " / " << total << "\r";
+    std::cout.flush();
 
-    // progress += 0.16; // for demonstration only
-
-    // Turned off bar
+    progress += 0.16; // for demonstration only
 }
 
 int shouldRemove(vector<int> vals)
