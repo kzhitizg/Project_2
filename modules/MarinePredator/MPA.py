@@ -89,20 +89,20 @@ class MPA:
 
             # -------------------Marine Memory Saving ------------------------
             if self.iter == 0:
-                fit_old = self.fitness
-                Prey_old = self.Prey
+                self.fit_old = self.fitness
+                self.Prey_old = self.Prey
 
-            Inx = (fit_old < self.fitness)
+            Inx = (self.fit_old < self.fitness)
             Indx = np.tile(Inx, (1, self.dim))
 
             # Set fitness of previous iteration, if it was better
             logging.debug(self.fitness)
-            self.Prey = Indx*Prey_old + (~Indx)*self.Prey
-            self.fitness = Inx*fit_old + (~Inx)*self.fitness
+            self.Prey = Indx*self.Prey_old + (~Indx)*self.Prey
+            self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
 
             logging.debug(self.fitness)
-            fit_old = self.fitness
-            Prey_old = self.Prey
+            self.fit_old = self.fitness
+            self.Prey_old = self.Prey
 
             # -----------------------------------------------------------------
 
@@ -160,18 +160,18 @@ class MPA:
 
             # -------------------Marine Memory Saving ------------------------
             if self.iter == 0:
-                fit_old = self.fitness
-                Prey_old = self.Prey
+                self.fit_old = self.fitness
+                self.Prey_old = self.Prey
 
-            Inx = (fit_old < self.fitness)
+            Inx = (self.fit_old < self.fitness)
             Indx = np.tile(Inx, (1, self.dim))
 
             # Set fitness of previous iteration, if it was better
-            self.Prey = Indx*Prey_old + (~Indx)*self.Prey
-            self.fitness = Inx*fit_old + (~Inx)*self.fitness
+            self.Prey = Indx*self.Prey_old + (~Indx)*self.Prey
+            self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
 
-            fit_old = self.fitness
-            Prey_old = self.Prey
+            self.fit_old = self.fitness
+            self.Prey_old = self.Prey
 
             # ---------- Eddy formation and FADs effect (Eq 16) -----------
 
@@ -227,17 +227,17 @@ class MPA:
             # -------------------Marine Memory Saving ------------------------
             if self.iter == 0:
                 self.fit_old = self.fitness
-                Prey_old = self.Prey
+                self.Prey_old = self.Prey
 
             Inx = (self.fit_old < self.fitness)
             Indx = np.tile(Inx, (1, self.dim))
 
             # Set fitness of previous iteration, if it was better
-            self.Prey = Indx*Prey_old + (~Indx)*self.Prey
+            self.Prey = Indx*self.Prey_old + (~Indx)*self.Prey
             self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
 
-            fit_old = self.fitness
-            Prey_old = self.Prey
+            self.fit_old = self.fitness
+            self.Prey_old = self.Prey
 
             # -----------------------------------------------------------------
 
@@ -295,18 +295,18 @@ class MPA:
 
             # -------------------Marine Memory Saving ------------------------
             if self.iter == 0:
-                fit_old = self.fitness
-                Prey_old = self.Prey
+                self.fit_old = self.fitness
+                self.Prey_old = self.Prey
 
-            Inx = (fit_old < self.fitness)
+            Inx = (self.fit_old < self.fitness)
             Indx = np.tile(Inx, (1, self.dim))
 
             # Set fitness of previous iteration, if it was better
-            self.Prey = Indx*Prey_old + (~Indx)*self.Prey
-            self.fitness = Inx*fit_old + (~Inx)*self.fitness
+            self.Prey = Indx*self.Prey_old + (~Indx)*self.Prey
+            self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
 
-            fit_old = self.fitness
-            Prey_old = self.Prey
+            self.fit_old = self.fitness
+            self.Prey_old = self.Prey
 
             # ---------- Eddy formation and FADs effect (Eq 16) -----------
 
