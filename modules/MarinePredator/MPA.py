@@ -73,6 +73,8 @@ class MPA:
 
         while self.iter < self.maxItr:
 
+            file.write("Iteration {}".format(self.iter))
+
             # ------------------ Detecting Top Predator ----------------------
             for i in range(self.Prey.shape[0]):
                 Flag4ub = self.Prey[i, :] > self.ub
@@ -191,6 +193,8 @@ class MPA:
             self.convergence_curve.append(self.Top_predator_fit)
             file.write("Top Fit: {} Iteration {}".format(
                 self.Top_predator_fit, self.iter))
+
+        file.close()
 
     def levy(self, n, m, beta):
         num = gamma(1+beta) * np.sin(np.pi * beta/2)
