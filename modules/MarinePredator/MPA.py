@@ -70,7 +70,7 @@ class MPA:
         # Initialize
         self.initialize()
 
-        file = open("/content/out.txt", w+)
+        file = open("/content/out.txt", "w+")
 
         while self.iter < self.maxItr:
 
