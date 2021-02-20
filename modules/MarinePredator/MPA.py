@@ -69,7 +69,7 @@ class MPA:
         # Initialize
         self.initialize()
 
-        file = open("out.txt", "a")
+        file = open("out.txt", "w+")
 
         while self.iter < self.maxItr:
 
