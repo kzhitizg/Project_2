@@ -3,7 +3,6 @@ from scipy.special import gamma
 from numpy import random
 from numpy.lib.function_base import percentile
 import logging
-import tensorflow as tf
 
 
 class MPA:
@@ -71,9 +70,11 @@ class MPA:
         # Initialize
         self.initialize()
 
+        file = open("/content/out.txt", w+)
+
         while self.iter < self.maxItr:
 
-            tf.print("Iteration {}".format(self.iter))
+            file.write("Iteration {}".format(self.iter))
 
             # ------------------ Detecting Top Predator ----------------------
             for i in range(self.Prey.shape[0]):
