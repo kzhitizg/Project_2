@@ -69,11 +69,9 @@ class MPA:
         # Initialize
         self.initialize()
 
-        file = open("out.txt", "w+")
-
         while self.iter < self.maxItr:
 
-            file.write("Iteration {}".format(self.iter))
+            print("Iteration {}".format(self.iter))
 
             # ------------------ Detecting Top Predator ----------------------
             for i in range(self.Prey.shape[0]):
@@ -97,11 +95,11 @@ class MPA:
             Indx = np.tile(Inx, (1, self.dim))
 
             # Set fitness of previous iteration, if it was better
-            file.write(self.fitness)
+            print(self.fitness)
             self.Prey = Indx*Prey_old + (~Indx)*self.Prey
             self.fitness = Inx*fit_old + (~Inx)*self.fitness
 
-            file.write(self.fitness)
+            print(self.fitness)
             fit_old = self.fitness
             Prey_old = self.Prey
 
@@ -191,10 +189,8 @@ class MPA:
 
             self.iter += 1
             self.convergence_curve.append(self.Top_predator_fit)
-            file.write("Top Fit: {} Iteration {}".format(
+            print("Top Fit: {} Iteration {}".format(
                 self.Top_predator_fit, self.iter))
-
-        file.close()
 
     def levy(self, n, m, beta):
         num = gamma(1+beta) * np.sin(np.pi * beta/2)
