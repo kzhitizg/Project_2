@@ -225,15 +225,15 @@ class MPA:
 
             # -------------------Marine Memory Saving ------------------------
             if self.iter == 0:
-                fit_old = self.fitness
+                self.fit_old = self.fitness
                 Prey_old = self.Prey
 
-            Inx = (fit_old < self.fitness)
+            Inx = (self.fit_old < self.fitness)
             Indx = np.tile(Inx, (1, self.dim))
 
             # Set fitness of previous iteration, if it was better
             self.Prey = Indx*Prey_old + (~Indx)*self.Prey
-            self.fitness = Inx*fit_old + (~Inx)*self.fitness
+            self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
 
             fit_old = self.fitness
             Prey_old = self.Prey
