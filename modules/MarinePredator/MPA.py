@@ -2,6 +2,7 @@ import numpy as np
 from scipy.special import gamma
 from numpy import random
 from numpy.lib.function_base import percentile
+import logging
 
 
 class MPA:
@@ -71,7 +72,7 @@ class MPA:
 
         while self.iter < self.maxItr:
 
-            print("Iteration {}".format(self.iter))
+            logging.INFO("Iteration {}".format(self.iter))
 
             # ------------------ Detecting Top Predator ----------------------
             for i in range(self.Prey.shape[0]):
@@ -95,11 +96,11 @@ class MPA:
             Indx = np.tile(Inx, (1, self.dim))
 
             # Set fitness of previous iteration, if it was better
-            print(self.fitness)
+            logging.debug(self.fitness)
             self.Prey = Indx*Prey_old + (~Indx)*self.Prey
             self.fitness = Inx*fit_old + (~Inx)*self.fitness
 
-            print(self.fitness)
+            logging.debug(self.fitness)
             fit_old = self.fitness
             Prey_old = self.Prey
 
@@ -189,7 +190,7 @@ class MPA:
 
             self.iter += 1
             self.convergence_curve.append(self.Top_predator_fit)
-            print("Top Fit: {} Iteration {}".format(
+            logging.info("Top Fit: {} Iteration {}".format(
                 self.Top_predator_fit, self.iter))
 
     def levy(self, n, m, beta):
