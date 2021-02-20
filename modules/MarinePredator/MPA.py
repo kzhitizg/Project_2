@@ -2,7 +2,6 @@ import numpy as np
 from scipy.special import gamma
 from numpy import random
 from numpy.lib.function_base import percentile
-from tqdm import tqdm
 
 
 class MPA:
@@ -69,6 +68,8 @@ class MPA:
     def run(self):
         # Initialize
         self.initialize()
+
+        file = open("out.txt", "a")
 
         while self.iter < self.maxItr:
 
@@ -188,7 +189,7 @@ class MPA:
 
             self.iter += 1
             self.convergence_curve.append(self.Top_predator_fit)
-            print("Top Fit: {} Iteration {}".format(
+            file.write("Top Fit: {} Iteration {}".format(
                 self.Top_predator_fit, self.iter))
 
     def levy(self, n, m, beta):
