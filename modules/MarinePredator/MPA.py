@@ -69,7 +69,6 @@ class MPA:
     def run(self):
         # Initialize
         self.initialize()
-        pbar = tqdm(total=self.maxItr)
 
         while self.iter < self.maxItr:
 
@@ -188,11 +187,9 @@ class MPA:
                 self.Prey = self.Prey + self.step_size
 
             self.iter += 1
-            pbar.update(1)
             self.convergence_curve.append(self.Top_predator_fit)
             print("Top Fit: {} Iteration {}".format(
                 self.Top_predator_fit, self.iter))
-        pbar.close()
 
     def levy(self, n, m, beta):
         num = gamma(1+beta) * np.sin(np.pi * beta/2)
