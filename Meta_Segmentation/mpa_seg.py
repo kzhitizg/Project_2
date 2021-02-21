@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import sys
 import pandas as pd
 import cv2 as cv
@@ -16,9 +10,6 @@ import multiprocessing as mp
 import time
 
 sys.path.append(os.path.join(os.path.dirname(os.getcwd()),"modules"))
-
-
-# In[2]:
 
 
 import NbrRegionSegment as seg
