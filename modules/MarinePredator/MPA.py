@@ -3,6 +3,7 @@ from scipy.special import gamma
 from numpy import random
 from numpy.lib.function_base import percentile
 import logging
+import matplotlib.pyplot as plt
 
 
 class MPA:
@@ -191,6 +192,12 @@ class MPA:
             logging.info("Top Fit: {} Iteration {}".format(
                 self.Top_predator_fit, self.iter))
 
+    # func to write to the file
+    def file_write(self, msg):
+        file = open("/content/out.txt", "a")
+        file.write(msg)
+        file.close()
+
     def levy(self, n, m, beta):
         num = gamma(1+beta) * np.sin(np.pi * beta/2)
 
@@ -207,7 +214,6 @@ class MPA:
         return z
 
     def run_once(self):
-        file = open("/content/out.txt", "a")
         if self.iter < self.maxItr:
 
             # ------------------ Detecting Top Predator ----------------------
@@ -218,7 +224,7 @@ class MPA:
                     self.Prey[i, :] * (~(Flag4ub + Flag4lb))) + self.ub * Flag4ub + self.lb * Flag4lb
 
                 self.fitness[i] = self.get_fitness(self.Prey[i, :])
-                file.write("Fitness of {} individual {}\n".format(
+                self.file_write("Fitness of {} individual {}\n".format(
                     i, self.fitness[i]))
 
                 if self.fitness[i] < self.Top_predator_fit:
@@ -281,33 +287,35 @@ class MPA:
                         self.Prey[i, j] = Elite[i, j] + \
                             self.P*CF*self.step_size[i, j]
 
-            # # ------------------ Detecting top predator ------------------
-            # for i in range(self.Prey.shape[0]):
-            #     Flag4ub = self.Prey[i, :] > self.ub
-            #     Flag4lb = self.Prey[i, :] < self.lb
-            #     self.Prey[i, :] = (
-            #         self.Prey[i, :]*(~(Flag4ub+Flag4lb))) + self.ub*Flag4ub + self.lb*Flag4lb
+            # ------------------ Detecting top predator ------------------
+            for i in range(self.Prey.shape[0]):
+                Flag4ub = self.Prey[i, :] > self.ub
+                Flag4lb = self.Prey[i, :] < self.lb
+                self.Prey[i, :] = (
+                    self.Prey[i, :]*(~(Flag4ub+Flag4lb))) + self.ub*Flag4ub + self.lb*Flag4lb
 
-            #     self.fitness[i] = self.get_fitness(self.Prey[i, :])
+                self.fitness[i] = self.get_fitness(self.Prey[i, :])
+                self.file_write("Fitness of {} individual {} round 2\n".format(
+                    i, self.fitness[i]))
 
-            #     if self.fitness[i] < self.Top_predator_fit:
-            #         self.Top_predator_fit = self.fitness[i]
-            #         self.Top_predator_pos = self.Prey[i, :]
+                if self.fitness[i] < self.Top_predator_fit:
+                    self.Top_predator_fit = self.fitness[i]
+                    self.Top_predator_pos = self.Prey[i, :]
 
-            # # -------------------Marine Memory Saving ------------------------
-            # if self.iter == 0:
-            #     self.fit_old = self.fitness
-            #     self.Prey_old = self.Prey
+            # -------------------Marine Memory Saving ------------------------
+            if self.iter == 0:
+                self.fit_old = self.fitness
+                self.Prey_old = self.Prey
 
-            # Inx = (self.fit_old < self.fitness)
-            # Indx = np.tile(Inx, (1, self.dim))
+            Inx = (self.fit_old < self.fitness)
+            Indx = np.tile(Inx, (1, self.dim))
 
-            # # Set fitness of previous iteration, if it was better
-            # self.Prey = Indx*self.Prey_old + (~Indx)*self.Prey
-            # self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
+            # Set fitness of previous iteration, if it was better
+            self.Prey = Indx*self.Prey_old + (~Indx)*self.Prey
+            self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
 
-            # self.fit_old = self.fitness
-            # self.Prey_old = self.Prey
+            self.fit_old = self.fitness
+            self.Prey_old = self.Prey
 
             # ---------- Eddy formation and FADs effect (Eq 16) -----------
 
@@ -325,14 +333,13 @@ class MPA:
                 self.Prey = self.Prey + self.step_size
 
             self.iter += 1
-            file.write("Final Fitness: {}\n".format(self.fitness))
             print("Fitness: {}".format(self.fitness))
             self.convergence_curve.append(self.Top_predator_fit)
-            file.write("Top Predator: {} and pos {}\n".format(
+            self.file_write("Top Predator: {} and pos {}\n".format(
                 self.Top_predator_fit, self.Top_predator_pos))
             print("Top Predator: {} and pos {}".format(
                 self.Top_predator_fit, self.Top_predator_pos))
-            file.close()
+            plt.plot(self.convergence_curve)
             return True
 
         else:
@@ -342,8 +349,7 @@ class MPA:
     def iter_gen(self):
         self.initialize()
         for i in range(self.maxItr):
-            file = open("/content/out.txt", "a")
-            file.write("--------------Iteration {}------------\n".format(i))
-            file.close()
+            self.file_write(
+                "--------------Iteration {}------------\n".format(i + 1))
             print("Iteration {}".format(i))
             yield self.run_once()
