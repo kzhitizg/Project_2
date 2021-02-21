@@ -64,7 +64,7 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
 
     // cout << num << ' ' << denom << endl;
 
-    float net_variance = num/denom;
+    float net_variance = 10*num/denom;
 
     return (float)net_variance;
 }
