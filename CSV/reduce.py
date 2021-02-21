@@ -29,7 +29,7 @@ print(count, classes)
 # proportion of each class in the original dataset
 proportion = count/np.sum(count)
 
-size_new_dataset = 10
+size_new_dataset = 15
 
 # count of each class in new dataset
 count_new = [math.ceil(x) for x in proportion*size_new_dataset]
