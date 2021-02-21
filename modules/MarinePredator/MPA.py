@@ -323,8 +323,11 @@ class MPA:
 
             self.iter += 1
             file.write("Fitness: {}".format(self.fitness))
+            print("Fitness: {}".format(self.fitness))
             self.convergence_curve.append(self.Top_predator_fit)
             file.write("Top Predator: {} and pos {}".format(
+                self.Top_predator_fit, self.Top_predator_pos))
+            print("Top Predator: {} and pos {}".format(
                 self.Top_predator_fit, self.Top_predator_pos))
             return True
 
@@ -334,7 +337,7 @@ class MPA:
 
     def iter_gen(self):
         self.initialize()
-        file = open("out.txt", "w+")
+        file = open("/content/out.txt", "w+")
         for i in range(self.maxItr):
             file.write("Iteration {}".format(i))
             print("Iteration {}".format(i))
