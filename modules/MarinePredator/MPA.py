@@ -333,7 +333,6 @@ class MPA:
                 self.Prey = self.Prey + self.step_size
 
             self.iter += 1
-            print("Fitness: {}".format(self.fitness))
             self.convergence_curve.append(self.Top_predator_fit)
             self.file_write("Top Predator: {} and pos {}\n".format(
                 self.Top_predator_fit, self.Top_predator_pos))
@@ -352,5 +351,5 @@ class MPA:
         for i in range(self.maxItr):
             self.file_write(
                 "--------------Iteration {}------------\n".format(i + 1))
-            print("Iteration {}".format(i))
+            print("Iteration {}".format(i+1))
             yield self.run_once()
