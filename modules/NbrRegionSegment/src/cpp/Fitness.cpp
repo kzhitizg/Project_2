@@ -43,7 +43,7 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
     {
         for (int j = 0; j < y; j++)
         {
-            x_minus_x_bar[*(labelled + y * i + j)] += count[*(labelled + y * i + j)]*pow(img[i][j] - mean[*(labelled + y * i + j)], 2);
+            x_minus_x_bar[*(labelled + y * i + j)] += pow(img[i][j] - mean[*(labelled + y * i + j)], 2);
         }
     }
 
@@ -60,7 +60,7 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
     // 0.0 because result shoud be float
     double num = accumulate(x_minus_x_bar.begin(), x_minus_x_bar.end(), 0.0),
         // denom = numReg*numReg;
-        denom = (((double)x)*y*x*y);
+        denom = (((double)x)*numReg);
 
     // cout << num << ' ' << denom << endl;
 
