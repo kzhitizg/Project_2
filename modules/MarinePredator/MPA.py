@@ -207,7 +207,7 @@ class MPA:
         return z
 
     def run_once(self):
-        file = open("out.txt", "a")
+        file = open("/content/out.txt", "a")
         if self.iter < self.maxItr:
 
             # ------------------ Detecting Top Predator ----------------------
@@ -342,7 +342,7 @@ class MPA:
     def iter_gen(self):
         self.initialize()
         for i in range(self.maxItr):
-            file = open("out.txt", "a")
+            file = open("/content/out.txt", "a")
             file.write("--------------Iteration {}------------\n".format(i))
             file.close()
             print("Iteration {}".format(i))
