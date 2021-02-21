@@ -340,6 +340,7 @@ class MPA:
             print("Top Predator: {} and pos {}".format(
                 self.Top_predator_fit, self.Top_predator_pos))
             plt.plot(self.convergence_curve)
+            plt.show()
             return True
 
         else:
