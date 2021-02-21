@@ -70,11 +70,7 @@ class MPA:
         # Initialize
         self.initialize()
 
-        file = open("/content/out.txt", "w+")
-
         while self.iter < self.maxItr:
-
-            file.write("Iteration {}".format(self.iter))
 
             # ------------------ Detecting Top Predator ----------------------
             for i in range(self.Prey.shape[0]):
@@ -210,7 +206,7 @@ class MPA:
 
         return z
 
-    def run_once(self):
+    def run_once(self, file):
         if self.iter < self.maxItr:
 
             # ------------------ Detecting Top Predator ----------------------
@@ -326,7 +322,10 @@ class MPA:
                 self.Prey = self.Prey + self.step_size
 
             self.iter += 1
+            file.write("Fitness: {}".format(self.fitness))
             self.convergence_curve.append(self.Top_predator_fit)
+            file.write("Top Predator: {} and pos {}".format(
+                self.Top_predator_fit, self.Top_predator_pos))
             return True
 
         else:
@@ -335,5 +334,8 @@ class MPA:
 
     def iter_gen(self):
         self.initialize()
+        file = open("out.txt", "w+")
         for i in range(self.maxItr):
-            yield self.run_once()
+            file.write("Iteration {}".format(i))
+            print("Iteration {}".format(i))
+            yield self.run_once(file)
