@@ -73,7 +73,8 @@ class MPA:
 
     # func to write to the file
     def file_write(self, msg):
-        file = open("/content/out.txt", "a")
+        file = open(
+            "/content/drive/My Drive/8thSem/BTP_Metaheuristic/scripts/Abhishek/out.txt", "a")
         file.write(msg)
         file.close()
 

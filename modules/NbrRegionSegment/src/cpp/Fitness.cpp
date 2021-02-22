@@ -73,7 +73,7 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
 {
     if (numReg <= 1)
     {
-        return 10000.0;
+        return 100000.0;
     }
     MAT2D img(x, vector<int>(y, 0));
     MAT2D lab(x, vector<int>(y, 0));
