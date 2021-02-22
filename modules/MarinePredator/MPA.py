@@ -71,145 +71,21 @@ class MPA:
             self.Prey[:, i] = np.random.rand(
                 self.search_agents_no)*(self.ub[i]-self.lb[i]) + self.lb[i]
 
+    # func to write to the file
+    def file_write(self, msg):
+        file = open("/content/out.txt", "a")
+        file.write(msg)
+        file.close()
+
     def get_fitness(self, vals):
         vals = tuple(map(float, np.split(vals, self.dim, 0)))
+        self.file_write("Pos {}\n".format(str(vals)))
         if vals in self.memory.keys():
             return self.memory[vals]
         else:
             fit = self.func(*vals)
             self.memory[vals] = fit
             return fit
-
-    def run(self):
-        # Initialize
-        self.initialize()
-
-        while self.curr_itr < self.maxItr:
-
-            # ------------------ Detecting Top Predator ----------------------
-            for i in range(self.Prey.shape[0]):
-                Flag4ub = self.Prey[i, :] > self.ub
-                Flag4lb = self.Prey[i, :] < self.lb
-                self.Prey[i, :] = (
-                    self.Prey[i, :] * (~(Flag4ub + Flag4lb))) + self.ub * Flag4ub + self.lb * Flag4lb
-
-                self.fitness[i] = self.get_fitness(self.Prey[i, :])
-
-                if self.fitness[i] < self.Top_predator_fit:
-                    self.Top_predator_fit = self.fitness[i]
-                    self.Top_predator_pos = self.Prey[i, :]
-
-            # -------------------Marine Memory Saving ------------------------
-            if self.curr_itr == 0:
-                self.fit_old = self.fitness
-                self.Prey_old = self.Prey
-
-            Inx = (self.fit_old < self.fitness)
-            Indx = np.tile(Inx, (1, self.dim))
-
-            # Set fitness of previous iteration, if it was better
-            logging.debug(self.fitness)
-            self.Prey = Indx*self.Prey_old + (~Indx)*self.Prey
-            self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
-
-            logging.debug(self.fitness)
-            self.fit_old = self.fitness
-            self.Prey_old = self.Prey
-
-            # -----------------------------------------------------------------
-
-            Elite = np.tile(self.Top_predator_pos, (self.search_agents_no, 1))
-            CF = (1 - self.curr_itr/self.maxItr) ** (2*self.curr_itr/self.maxItr)
-
-            # Levy random number vector
-            RL = 0.05 * self.levy(self.search_agents_no, self.dim, 1.5)
-            # Brownian random number vector
-            RB = np.random.randn(self.search_agents_no, self.dim)
-
-            for i in range(self.Prey.shape[0]):
-                for j in range(self.Prey.shape[1]):
-                    R = np.random.rand()
-                    # ------------------ Phase 1 (Eq.12) -------------------
-                    if self.curr_itr < self.maxItr/3:
-                        self.step_size[i, j] = RB[i, j] * \
-                            (Elite[i, j]-RB[i, j]*self.Prey[i, j])
-                        self.Prey[i, j] = self.Prey[i, j] + \
-                            self.P * R * self.step_size[i, j]
-
-                    # --------------- Phase 2 (Eqs. 13 & 14)----------------
-                    elif self.curr_itr > self.maxItr/3 and self.curr_itr < 2*self.maxItr/3:
-
-                        if i > self.Prey.shape[0] / 2:
-                            self.step_size[i, j] = RB[i, j] * \
-                                (RB[i, j] * Elite[i, j] - self.Prey[i, j])
-                            self.Prey[i, j] = Elite[i, j] + \
-                                self.P*CF*self.step_size[i, j]
-                        else:
-                            self.step_size[i, j] = RL[i, j] * \
-                                (Elite[i, j] - RL[i, j] * self.Prey[i, j])
-                            self.Prey[i, j] = self.Prey[i, j] + \
-                                self.P * R * self.step_size[i, j]
-
-                    # ----------------- Phase 3 (Eq. 15)-------------------
-                    else:
-                        self.step_size[i, j] = RL[i, j] * \
-                            (RL[i, j] * Elite[i, j] - self.Prey[i, j])
-                        self.Prey[i, j] = Elite[i, j] + \
-                            self.P*CF*self.step_size[i, j]
-
-            # ------------------ Detecting top predator ------------------
-            for i in range(self.Prey.shape[0]):
-                Flag4ub = self.Prey[i, :] > self.ub
-                Flag4lb = self.Prey[i, :] < self.lb
-                self.Prey[i, :] = (
-                    self.Prey[i, :]*(~(Flag4ub+Flag4lb))) + self.ub*Flag4ub + self.lb*Flag4lb
-
-                self.fitness[i] = self.get_fitness(self.Prey[i, :])
-
-                if self.fitness[i] < self.Top_predator_fit:
-                    self.Top_predator_fit = self.fitness[i]
-                    self.Top_predator_pos = self.Prey[i, :]
-
-            # -------------------Marine Memory Saving ------------------------
-            if self.curr_itr == 0:
-                self.fit_old = self.fitness
-                self.Prey_old = self.Prey
-
-            Inx = (self.fit_old < self.fitness)
-            Indx = np.tile(Inx, (1, self.dim))
-
-            # Set fitness of previous iteration, if it was better
-            self.Prey = Indx*self.Prey_old + (~Indx)*self.Prey
-            self.fitness = Inx*self.fit_old + (~Inx)*self.fitness
-
-            self.fit_old = self.fitness
-            self.Prey_old = self.Prey
-
-            # ---------- Eddy formation and FADs effect (Eq 16) -----------
-
-            if np.random.rand() < self.FADs:
-                U = np.random.rand(self.search_agents_no, self.dim) < self.FADs
-                self.Prey = self.Prey + CF * \
-                    ((self.Xmin+np.random.rand(self.search_agents_no,
-                                               self.dim) * (self.Xmax - self.Xmin)) * U)
-
-            else:
-                r = np.random.rand()
-                Rs = self.Prey.shape[0]
-                self.step_size = (self.FADs * (1-r)+r) * (
-                    self.Prey[np.random.permutation(Rs), :] - self.Prey[np.random.permutation(Rs), :])
-                self.Prey = self.Prey + self.step_size
-
-            self.curr_itr += 1
-            self.convergence_curve.append(self.Top_predator_fit)
-            logging.info("Top Fit: {} Iteration {}".format(
-                self.Top_predator_fit, self.curr_itr))
-
-    # func to write to the file
-    def file_write(self, msg):
-        file = open("/content/out.txt", "a")
-        file.write(msg)
-        file.close()
 
     def levy(self, n, m, beta):
         num = gamma(1+beta) * np.sin(np.pi * beta/2)

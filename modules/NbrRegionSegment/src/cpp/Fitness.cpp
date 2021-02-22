@@ -12,7 +12,7 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
     {
         for (int j = 0; j < y; j++)
         {
-            img[i][j] = *(n + (y * i + j))/256.0;
+            img[i][j] = *(n + (y * i + j)) / 255.0;
         }
     }
 
@@ -34,7 +34,7 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
     for (int i = 0; i < numReg; i++)
     {
         mean[i] = sum[i] / count[i];
-        countsq[i] = count[i]*count[i];
+        countsq[i] = count[i] * count[i];
     }
 
     vector<double> x_minus_x_bar(numReg, 0);
@@ -58,13 +58,13 @@ float IntraSegVariance(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
     */
 
     // 0.0 because result shoud be float
-    double num = accumulate(x_minus_x_bar.begin(), x_minus_x_bar.end(), 0.0),
-        // denom = numReg*numReg;
-        denom = (((double)x)*numReg);
+    float num = accumulate(x_minus_x_bar.begin(), x_minus_x_bar.end(), 0.0),
+          // denom = numReg*numReg;
+        denom = (((float)x) * numReg);
 
     // cout << num << ' ' << denom << endl;
 
-    float net_variance = 10*num/denom;
+    float net_variance = 10 * (num / denom);
 
     return (float)net_variance;
 }
@@ -95,7 +95,7 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
     vector<set<int>> w(numReg, set<int>());
 
     // No need to consider right and down neighbours, as they will be counter later
-    // Instead, 
+    // Instead,
     int dx[] = {0, -1};
     int dy[] = {-1, 0};
 
@@ -154,14 +154,13 @@ float MoranI(ARR_TYPE *n, int *labelled, int x, int y, int numReg)
     for (int i = 0; i < numReg; i++)
     {
         numerator += (mean[i] - img_mean) * (mean[i] - img_mean);
-        for (int j = i+1; j < numReg; j++)
+        for (int j = i + 1; j < numReg; j++)
         {
             tmp = &w[i];
 
             if ((*tmp).find(j) != (*tmp).end())
             {
                 numerator += (mean[i] - img_mean) * (mean[j] - img_mean);
-
             }
         }
 
