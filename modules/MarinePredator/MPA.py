@@ -4,6 +4,7 @@ from numpy import random
 from numpy.lib.function_base import percentile
 import logging
 import matplotlib.pyplot as plt
+import pickle
 
 
 class MPA:
@@ -21,6 +22,13 @@ class MPA:
         initialize(): Initializes the variables for simulation
         run(): Run Simulation
     """
+
+    @staticmethod
+    def load_mpa(file_name):
+        f = open(file_name, "rb")
+        m = pickle.load(f)
+        f.close()
+        return m
 
     def __init__(self, agentsCount, maxItr, lb, ub, dim, func):
         self.search_agents_no = agentsCount
@@ -50,6 +58,11 @@ class MPA:
 
         # It will act as a memory for previously used parameters
         self.memory = {}
+
+    def save_mpa(self, file_name):
+        f = open(file_name, "wb")
+        pickle.dump(self, f)
+        f.close()
 
     def __init_positions(self):
         # initialize positions of preys
