@@ -26,10 +26,10 @@ def GetAllSegVariance(img, lab, nr, show_time = False):
 
     return res
 
-def SegmentImage(img, lbp, thres, wr, wg, wc, show_time=False):
+def SegmentImage(img, lbp, thres, wr, wg, wb, wc, show_time=False):
     t = time.time()
 
-    res = _SegmentWrapper(img, lbp, thres, wr, wg, wc)
+    res = _SegmentWrapper(img, lbp, thres, wr, wg, wb, wc)
 
     if show_time:
         total = time.time()-t
@@ -39,10 +39,10 @@ def SegmentImage(img, lbp, thres, wr, wg, wc, show_time=False):
     return res
 
 
-def RegionExtract(img, lbp, thres, wr, wg, wc, show_time=False):
+def RegionExtract(img, lbp, thres, wr, wg, wb, wc, show_time=False):
     t = time.time()
 
-    res, reg = _RegionExtractWrapper(img, lbp, thres, wr, wg, wc)
+    res, reg = _RegionExtractWrapper(img, lbp, thres, wr, wg, wb, wc)
 
     if show_time:
         total = time.time()-t
@@ -52,10 +52,10 @@ def RegionExtract(img, lbp, thres, wr, wg, wc, show_time=False):
     return res, reg
 
 
-def RemoveBG(img, lbp, thres1, thres2, wr, wg, wc, show_time=False):
+def RemoveBG(img, lbp, thres1, thres2, wr, wg, wb, wc, show_time=False):
     t = time.time()
 
-    ret = _RemoveBG(img, lbp, thres1, thres2, wr, wg, wc)
+    ret = _RemoveBG(img, lbp, thres1, thres2, wr, wg, wb, wc)
 
     if show_time:
         total = time.time()-t

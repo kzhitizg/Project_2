@@ -74,7 +74,7 @@ vector<vector<int>> label(MAT3D &grid, int thres)
 }
 
 // Function to assign label to each region in the image
-vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.2, float wg = 0.2, float wc = 0.7)
+vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.4, float wg = 0.2, float wb = 0.4, float wc = 0.7)
 {
     int r = grid.size();
     int c = grid[0].size();
@@ -86,7 +86,7 @@ vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.2, 
     {
         for (int j = 0; j < c; j++)
         {
-            if ((i > 0 && matchLbp(i, j, i - 1, j, grid, thres, lbp, wr, wg, wc)) && (j > 0 && matchLbp(i, j, i, j - 1, grid, thres, lbp, wr, wg, wc)))
+            if ((i > 0 && matchLbp(i, j, i - 1, j, grid, thres, lbp, wr, wg, wb, wc)) && (j > 0 && matchLbp(i, j, i, j - 1, grid, thres, lbp, wr, wg, wb, wc)))
             {
                 lbl[i][j] = lbl[i][j - 1];
                 if (lbl[i][j - 1] != lbl[i - 1][j])
@@ -94,11 +94,11 @@ vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.2, 
                     add(eqtable, lbl[i - 1][j], lbl[i][j - 1]);
                 }
             }
-            else if ((i > 0 && match(i, j, i - 1, j, grid, thres)))
+            else if ((i > 0 && matchLbp(i, j, i - 1, j, grid, thres, lbp, wr, wg, wb, wc)))
             {
                 lbl[i][j] = lbl[i - 1][j];
             }
-            else if ((j > 0 && match(i, j, i, j - 1, grid, thres)))
+            else if ((j > 0 && matchLbp(i, j, i, j - 1, grid, thres, lbp, wr, wg, wb, wc)))
             {
                 lbl[i][j] = lbl[i][j - 1];
             }
@@ -143,7 +143,7 @@ vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.2, 
 }
 
 // Function to be exported. Takes image array as input and returns image with coloured regions
-void Segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, ARR_TYPE *ret)
+void Segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wb, float wc, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -168,7 +168,7 @@ void Segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr,
         }
     }
 
-    vector<vector<int>> lbl = labelv2(img, thres, lbp, wr, wg, wc);
+    vector<vector<int>> lbl = labelv2(img, thres, lbp, wr, wg, wb, wc);
 
     int r = x, c = y;
 
@@ -202,7 +202,7 @@ void Segment(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr,
     }
 }
 
-int GetRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wc, int *ret, int *count)
+int GetRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float wr, float wg, float wb, float wc, int *ret, int *count)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -227,7 +227,7 @@ int GetRegions(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres, float w
         }
     }
 
-    vector<vector<int>> lbl = labelv2(img, thres, lbp, wr, wg, wc);
+    vector<vector<int>> lbl = labelv2(img, thres, lbp, wr, wg, wb, wc);
 
     int r = x, c = y;
 
@@ -287,7 +287,7 @@ void RemoveMap(int *n, int x, int y, int thres, int *count, int regs, bool *ret)
     }
 }
 
-void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float wr, float wg, float wc, ARR_TYPE *ret)
+void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1, int thres2, float wr, float wg, float wb, float wc, ARR_TYPE *ret)
 {
     MAT3D img(x, vector<vector<int>>(y, vector<int>(z, 0)));
 
@@ -311,7 +311,7 @@ void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1,
         }
     }
 
-    vector<vector<int>> lbl = labelv2(img, thres1, lbp, wr, wg, wc);
+    vector<vector<int>> lbl = labelv2(img, thres1, lbp, wr, wg, wb, wc);
 
     int r = x, c = y;
 
