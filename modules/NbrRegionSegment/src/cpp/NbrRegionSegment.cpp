@@ -94,11 +94,11 @@ vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.2, 
                     add(eqtable, lbl[i - 1][j], lbl[i][j - 1]);
                 }
             }
-            else if ((i > 0 && match(i, j, i - 1, j, grid, thres)))
+            else if ((i > 0 && matchLbp(i, j, i - 1, j, grid, thres, lbp, wr, wg, wc)))
             {
                 lbl[i][j] = lbl[i - 1][j];
             }
-            else if ((j > 0 && match(i, j, i, j - 1, grid, thres)))
+            else if ((j > 0 && matchLbp(i, j, i, j - 1, grid, thres, lbp, wr, wg, wc)))
             {
                 lbl[i][j] = lbl[i][j - 1];
             }
