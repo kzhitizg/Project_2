@@ -4,7 +4,7 @@ import cv2 as cv
 import numpy as np
 from skimage.feature import local_binary_pattern
 
-img = cv.imread("E:/8thSem/BTP_Research/Project_2/Dataset/" +
+img = cv.imread("Dataset/" +
                 "Case_3_A12-37374-17669" + ".jpg")
 # img = cv.resize(img, (0,0), fx = 0.5, fy = 0.5)
 # img = cv.imread("D:\Project 2\Project_2\Region_Growing\input.jpg")
@@ -15,9 +15,9 @@ points = 8*radius
 
 lbp = local_binary_pattern(gray_img, points, radius, "uniform").astype("uint8")
 
-for i in range(10, 50, 5):
+for i in range(5, 6):
     r1, r2 = _RegionExtractWrapper(
-        img, lbp, i, 5.12561905e-01, 1.17403947e-01, 8.39755087e-01,)
+        cv.cvtColor(img, cv.COLOR_BGR2LAB), lbp, i, .4, .5, .6, .9,)
 
     a, b = _GetAllVariance(gray_img, r1, r2.shape[0])
     print(a, b, a+b)
