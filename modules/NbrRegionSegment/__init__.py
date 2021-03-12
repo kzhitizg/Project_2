@@ -1,8 +1,25 @@
+"""Segmentation Module
+
+Functions
+
+    GetWeightedGray - To get the weighted grayscale image
+
+    GetAllSegCariance - To get Fitness values (Inter and Intra) for an image
+
+    SegmentImage - To segment an image and return a color coded image marking the regions
+
+    RegionExtract - To segment an image and get a label map marking all regions
+
+    RemoveBG - To segment an image and remove the background
+
+    GetBGMap - To get the background map from label map of an image
+"""
+
 from .NbrRegionSegment import _SegmentWrapper, _RegionExtractWrapper, _GetBGWrapper, _RemoveBG, _GetAllVariance
 import time
 import numpy as np
 
-def GetWeightedGrey(img, wr, wg, show_time = True):
+def GetWeightedGray(img, wr, wg, show_time = True):
     t = time.time()
 
     newim = (img[:, :, 0]*wr + img[:, :, 1]*wg + img[:, :, 2]*(1-wr-wg)).astype("uint8")
