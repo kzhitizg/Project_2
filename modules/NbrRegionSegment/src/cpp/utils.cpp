@@ -59,15 +59,28 @@ float score(vector<int> p1, vector<int> p2, float wr, float wg)
     return res;
 }
 
-float score_t_c(int i1, int j1, int i2, int j2, MAT3D &grid, MAT2D &lbp, float wr, float wg, float wc){
+//function to get the score of 2 pixels, with wb
+float scorev2(vector<int> p1, vector<int> p2, float wr, float wg, float wb)
+{
+    if (p1.size() != p2.size())
+    {
+        throw length_error("Error calculating eculidean distance between unequal size arrays");
+    }
+
+    float res = (wr * abs(p1[0] - p2[0]) + wg * abs(p1[1] - p2[1]) + wb * abs(p1[2] - p2[2]))/(wr+wg+wb);
+
+    return res;
+}
+
+float score_t_c(int i1, int j1, int i2, int j2, MAT3D &grid, MAT2D &lbp, float wr, float wg, float wb, float wc){
     vector<int> p1 = grid[i1][j1], p2 = grid[i2][j2];
-    return wc * score(p1, p2, wr, wg) + (1 - wc) * abs(lbp[i1][j1] - lbp[i2][j2]);
+    return wc * scorev2(p1, p2, wr, wg, wb) + (1 - wc) * abs(lbp[i1][j1] - lbp[i2][j2]);
 }
 
 // Fucntion to check the merging criteria
-bool matchLbp(int i1, int j1, int i2, int j2, MAT3D &grid, int thres, MAT2D &lbp, float wr, float wg, float wc)
+bool matchLbp(int i1, int j1, int i2, int j2, MAT3D &grid, int thres, MAT2D &lbp, float wr, float wg, float wb, float wc)
 {
-    float diff = score_t_c(i1, j1, i2, j2, grid, lbp, wr, wg, wc);
+    float diff = score_t_c(i1, j1, i2, j2, grid, lbp, wr, wg, wb, wc);
     if (diff < thres)
         return true;
     return false;

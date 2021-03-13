@@ -1,0 +1,4 @@
+color with tex = 12
+color without = 8
+
+lab both = 4
