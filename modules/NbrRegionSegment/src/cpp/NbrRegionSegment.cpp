@@ -99,6 +99,7 @@ vector<vector<int>> labelv2(MAT3D &grid, int thres, MAT2D &lbp, float wr = 0.4, 
                 lbl[i][j] = lbl[i - 1][j];
             }
             else if ((j > 0 && matchLbp(i, j, i, j - 1, grid, thres, lbp, wr, wg, wb, wc)))
+
             {
                 lbl[i][j] = lbl[i][j - 1];
             }
