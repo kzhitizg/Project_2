@@ -18,3 +18,26 @@ Contains Region Growing through neighbours, implemented in cpp
 * .pyd file should be created along with build directory
 * The pyd file can be imported as a normal python file (import xyz). The functions defined in the .pyx file (in src/cython folder) can be used as normal python functions
 * For better usability, the .pyd functions are wrapped by module itself, so importing the folder in a script will provide all required functions with better IDE suggestions. Its usage can be found in Segmentation.ipynb
+
+
+
+
+
+
+
+
+### GLCM Features
+* Energy
+* Contrast
+* Inverse difference moment
+* Entropy
+* Correlation
+* Variance
+* Sum average
+* Sum variance
+* sum entropy
+* Difference Entropy
+* Difference Variance
+* Inverse measure of Correlation 1
+* Inverse measure of Correlation 2
+* Maximal correlation of correlation
