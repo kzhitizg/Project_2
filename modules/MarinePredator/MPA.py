@@ -74,7 +74,7 @@ class MPA:
     # func to write to the file
     def file_write(self, msg):
         file = open(
-            "/content/drive/My Drive/8thSem/BTP_Metaheuristic/scripts/Abhishek/out.txt", "a")
+            "/content/drive/My Drive/8thSem/BTP_Metaheuristic/scripts/Abhishek/checkpoints/out.txt", "a")
         file.write(msg)
         file.close()
 
@@ -237,9 +237,9 @@ class MPA:
             return False
 
     def iter_gen(self):
-        self.initialize()
-        for i in range(self.maxItr):
+        # self.initialize()
+        while self.curr_itr < self.maxItr:
             self.file_write(
-                "--------------Iteration {}------------\n".format(i + 1))
-            print("Iteration {}".format(i+1))
+                "--------------Iteration {}------------\n".format(self.curr_itr + 1))
+            print("Iteration {}".format(self.curr_itr+1))
             yield self.run_once()
