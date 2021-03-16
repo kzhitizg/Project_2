@@ -164,18 +164,19 @@ def AllFeatures(mat):
 
     return res
 
-def AllFeaturesAllMatrix(mat, hasBG = False):
+def AllFeaturesAllMatrix(mat, normalize = False):
     """Used to calculate all 13 GLCM features for All distances and orientations
 
     Args:
         mat (4D array): 4D array, output of inbuilt GLCM
+        normalize (Bool): Should the input matrix be normalized
     """
 
     res = np.empty((mat.shape[2]*mat.shape[3], 13), dtype="float32")
 
     for i in range(mat.shape[2]):
         for j in range(mat.shape[3]):
-            if hasBG:    
+            if normalize:    
                 res[i*13+j] = AllFeatures(WithoutBgNorm(mat[:, :, i, j]))
             else:
                 res[i*13+j] = AllFeatures(mat[:, :, i, j])
