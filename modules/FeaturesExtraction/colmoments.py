@@ -16,7 +16,7 @@ def secondmoment(px, mn):
 
 
 def thirdmoment(px, mn):
-    return np.float_power(np.sum(np.float_power((px - mn), 3))/len(px), 1/3)
+    return np.cbrt(np.sum(np.float_power((px - mn), 3))/len(px))
 
 # func for 4th moment
 
@@ -28,7 +28,7 @@ def fourthmoment(px, mn):
 
 
 def ColorMoments(img):
-    feat = np.empty(12, dtype=object)
+    feat = np.empty(12, dtype="float32")
 
     # get a array of pixels that are not zero or black in color i.e. bg
     non_black_pixels = img[np.any(img != [0, 0, 0], axis=-1)]
