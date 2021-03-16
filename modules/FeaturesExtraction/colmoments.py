@@ -10,19 +10,19 @@ def firstmoment(px):
 
 
 def secondmoment(px, mn):
-    return np.sqrt(np.sum((px - mn)**2)/len(px))
+    return np.sqrt(np.sum(np.float_power((px - mn), 2))/len(px))
 
 # func for 3rd moment
 
 
 def thirdmoment(px, mn):
-    return np.float_power(np.sum((px - mn)**3)/len(px), 1/3)
+    return np.float_power(np.sum(np.float_power((px - mn), 3))/len(px), 1/3)
 
 # func for 4th moment
 
 
 def fourthmoment(px, mn):
-    return np.float_power(np.sum((px - mn)**4)/len(px), 1/4)
+    return np.float_power(np.float_power((px - mn), 4)/len(px), 1/4)
 
 # function to return the array of 12 features (4 for each channel)
 
