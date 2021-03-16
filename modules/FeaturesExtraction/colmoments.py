@@ -28,7 +28,7 @@ def fourthmoment(px, mn):
 
 
 def ColorMoments(img):
-    feat = np.empty(12, dtype="float32")
+    feat = np.empty(12, dtype=object)
 
     # get a array of pixels that are not zero or black in color i.e. bg
     non_black_pixels = img[np.any(img != [0, 0, 0], axis=-1)]
