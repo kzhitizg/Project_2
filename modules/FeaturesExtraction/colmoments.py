@@ -50,5 +50,3 @@ def GetNames():
     for col in ["B", "G", "R"]:
         ret.extend([m+"_"+col for m in moments])
     return ret
-
-print(GetNames())
