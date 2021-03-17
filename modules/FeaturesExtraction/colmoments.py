@@ -43,3 +43,12 @@ def ColorMoments(img):
         feat[4*i + 3] = fourthmoment(non_black_pixels[:, i], mn)  # kurtosis
 
     return feat
+
+def GetNames():
+    moments = ["Mean", "SD", "Skewness", "Kurtosis"]
+    ret = []
+    for col in ["B", "G", "R"]:
+        ret.extend([m+"_"+col for m in moments])
+    return ret
+
+print(GetNames())

@@ -182,3 +182,30 @@ def AllFeaturesAllMatrix(mat, normalize = False):
                 res[i*13+j] = AllFeatures(mat[:, :, i, j])
         
     return res.flatten()
+
+def GetFeatNames():
+    return [
+        "ASM",
+        "Contrast",
+        "InverseDiffMoment",
+        "Entropy",
+        "Correlation",
+        "Variance",
+        "SumAverage",
+        "SumEntropy",
+        "SumVariance",
+        "DiffEntropy",
+        "DiffVariance",
+        "InverseMeasureOfCorrelation1",
+        "InverseMeasureOfCorrelation2"
+    ]
+
+def GetFeatNamesAllMatrix(dist, angles):
+    ret = []
+    names = GetFeatNames()
+    for d in dist:
+        for a in angles:
+            for n in names:
+                ret.append(n+"_"+str(d)+"_"+str(a))
+
+    return ret
