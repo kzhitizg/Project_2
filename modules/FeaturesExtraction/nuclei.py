@@ -77,7 +77,7 @@ def GetFeatures(img):
 
     Area = np.sum(nuc_mask == 0)
 
-    Circularity = 4*np.math.pi*Area/P
+    Circularity = 4*np.math.pi*Area/(P**2)
 
     r, _ = cv.connectedComponents(255-nuc_mask)
 
