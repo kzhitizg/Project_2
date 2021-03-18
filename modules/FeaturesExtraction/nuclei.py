@@ -72,7 +72,7 @@ def GetFeatures(img):
     nuc_mask = SegmentNuclei(img)
 
     # Count boundary pixels
-    glcm = greycomatrix(nuc_mask, [1], [0, 90], 255)
+    glcm = greycomatrix(nuc_mask, [1], [0, 90], 256)
     P = glcm[0, -1, 0, 0] + glcm[0, -1, 0, 1]
 
     Area = np.sum(nuc_mask == 0)
@@ -81,7 +81,7 @@ def GetFeatures(img):
 
     r, _ = cv.connectedComponents(255-nuc_mask)
 
-    return np.array(P, Area, Circularity, r)
+    return np.array([P, Area, Circularity, r])
 
 def GetFeatNames():
     return [
