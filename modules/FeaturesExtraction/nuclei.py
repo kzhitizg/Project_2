@@ -81,12 +81,15 @@ def GetFeatures(img):
 
     r, _ = cv.connectedComponents(255-nuc_mask)
 
-    return np.array([P, Area, Circularity, r])
+    col = np.mean(img[nuc_mask==0])
+
+    return np.array([P, Area, Circularity, r, col])
 
 def GetFeatNames():
     return [
         "Perimeter",
         "Area",
         "Circularity",
-        "NucleiCount"
+        "NucleiCount",
+        "MeanColor"
         ]
