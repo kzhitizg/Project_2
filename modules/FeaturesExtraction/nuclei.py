@@ -70,6 +70,8 @@ def SegmentNuclei(img):
 
 def GetFeatures(img):
     nuc_mask = SegmentNuclei(img)
+    if np.sum(nuc_mask == 0) == 0:
+        return np.array([0, 0, 0, 0, 0])
 
     # Count boundary pixels
     glcm = greycomatrix(nuc_mask, [1], [0, 90], 256)
