@@ -350,7 +350,7 @@ void SegmentAndRemove(ARR_TYPE *n, ARR_TYPE *l, int x, int y, int z, int thres1,
             {
                 if (remove)
                 {
-                    *(ret + z * (y * i + j) + k) = (ARR_TYPE)0;
+                    *(ret + z * (y * i + j) + k) = (ARR_TYPE)255;
                 }
                 else
                 {
